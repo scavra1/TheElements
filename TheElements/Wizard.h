@@ -13,4 +13,8 @@ private:
 
 	int mana;
 
+	void StartAttack();
+
+	void StopAttack();
+
 };
