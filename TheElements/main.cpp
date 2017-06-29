@@ -2,6 +2,7 @@
 #include <SFML\Graphics.hpp>
 #include "MainMenu.h"
 #include "ResourceBar.h"
+#include "ManaBar.h"
 
 int main(int argc, char ** argv)
 {
@@ -14,6 +15,9 @@ int main(int argc, char ** argv)
 	MainMenu mainMenu(sf::Vector2u(WindowSizeX, WindowSizeY));
 	
 	ResourceBar hpBar(50, 200);
+	ManaBar manaBar(400, 1000);
+
+	manaBar.SetPosition(sf::Vector2f(0, 200));
 
 	sf::Clock clock;
 	while (window.isOpen())
@@ -29,21 +33,25 @@ int main(int argc, char ** argv)
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
 					hpBar.AddResource(20);
+					manaBar.AddResource(30);
 				}
 				else
 				{
 					hpBar.SubtractResource(20);
+					manaBar.SubtractResource(30);
 				}
 			}
 		}
 
 		mainMenu.OnUpdate(std::cos(clock.getElapsedTime().asSeconds()));
 		hpBar.OnUpdate();
+		manaBar.OnUpdate();
 		
 		window.clear(sf::Color::White);
 
 		mainMenu.OnDraw(window);
 		hpBar.OnDraw(window);
+		manaBar.OnDraw(window);
 
 		window.display();
 	}

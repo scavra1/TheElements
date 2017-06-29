@@ -12,6 +12,7 @@ ResourceBar::ResourceBar(int startLoad, int maxCapacity)
 		throw std::string("Could not load texture in resource bar loader.");
 
 	this->barSprite.setTexture(this->texture);
+	this->shader.setUniform("barSize", (int)this->texture.getSize().x);
 }
 
 void ResourceBar::AddResource(int value)
@@ -37,11 +38,10 @@ void ResourceBar::SetPosition(sf::Vector2f position)
 
 void ResourceBar::OnUpdate()
 {
+	this->shader.setUniform("loadRatio", ((float)this->load / this->maximumCapacity));
 }
 
 void ResourceBar::OnDraw(sf::RenderWindow & window)
 {
-	this->shader.setUniform("barSize", (int)this->texture.getSize().x);
-	this->shader.setUniform("loadRatio", ((float)this->load / this->maximumCapacity));
 	window.draw(this->barSprite, sf::RenderStates(&this->shader));
 }

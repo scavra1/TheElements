@@ -10,6 +10,9 @@ ManaBar::ManaBar(int startLoad, int maxCapacity)
 
 	if (!this->texture.loadFromFile("textures/bar.png"))
 		throw std::string("Could not load texture in mana bar loader.");
+
+	this->barSprite.setTexture(texture);
+	this->shader.setUniform("barSize", (int)this->texture.getSize().x);
 }
 
 void ManaBar::AddResource(int value)
@@ -35,6 +38,7 @@ void ManaBar::SetPosition(sf::Vector2f position)
 
 void ManaBar::OnUpdate()
 {
+	this->shader.setUniform("loadRatio", ((float)this->load / this->maximumCapacity));
 }
 
 void ManaBar::OnDraw(sf::RenderWindow & window)

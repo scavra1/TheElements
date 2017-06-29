@@ -4,6 +4,13 @@ class Wizard
 {
 
 public:
-	 Wizard();
+	 Wizard(int maxHealth, int maxMana);
+
+
+private:
+	
+	int health;
+
+	int mana;
 
 };
