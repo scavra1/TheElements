@@ -1,4 +1,6 @@
 #include "Wizard.h"
+#include <math.h>
+# define M_PI           3.14159265358979323846  /* pi */
 
 
 Wizard::Wizard(int maxHealth, int maxMana)
@@ -7,30 +9,35 @@ Wizard::Wizard(int maxHealth, int maxMana)
 	this->mana = maxMana;
 }
 
-void Wizard::SetPosition(int x, int y)
+void Wizard::SetPosition(double x, double y, double r)
 {
 	this->xPosition = x;
 	this->yPosition = y;
+	this->rotation = r;
 }
 
-void Wizard::MoveLeft()
+void Wizard::MoveLeft(double displacement)
 {
-	this->xPosition -= 1;
+	this->yPosition -= displacement * cos(this->rotation - M_PI / 2);
+	this->xPosition += displacement * sin(this->rotation - M_PI / 2);
 }
 
-void Wizard::MoveRight()
+void Wizard::MoveRight(double displacement)
 {
-	this->xPosition += 1;
+	this->yPosition -= displacement * cos(this->rotation + M_PI / 2);
+	this->xPosition += displacement * sin(this->rotation + M_PI / 2);
 }
 
-void Wizard::MoveDown()
+void Wizard::MoveBackward(double displacement)
 {
-	this->yPosition += 1;
+	this->yPosition -= displacement * cos(this->rotation + M_PI);
+	this->xPosition += displacement * sin(this->rotation + M_PI);
 }
 
-void Wizard::MoveUp()
+void Wizard::MoveForward(double displacement)
 {
-	this->yPosition -= 1;
+	this->yPosition -= displacement * cos(this->rotation);
+	this->xPosition += displacement * sin(this->rotation);
 }
 
 void Wizard::StartAttack()
@@ -43,14 +50,14 @@ void Wizard::StopAttack()
 
 }
 
-void Wizard::RotateLeft()
+void Wizard::RotateLeft(double angle)
 {
-	this->rotation += 5;
+	this->rotation -= angle;
 }
 
-void Wizard::RotateRight()
+void Wizard::RotateRight(double angle)
 {
-	this->rotation -= 5;
+	this->rotation += angle;
 }
 
 void Wizard::OnUpdate()
@@ -63,6 +70,7 @@ void Wizard::OnDraw(sf::RenderWindow & window)
 	sf::CircleShape shape(40, 3);
 	shape.setFillColor(sf::Color::Blue);
 	shape.setPosition(this->xPosition, this->yPosition);
+	shape.rotate(this->rotation * 180.0 / M_PI);
 	window.draw(shape);
 }
 

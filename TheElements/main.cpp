@@ -26,7 +26,7 @@ int main(int argc, char ** argv)
 
 	GameSpace::Game game;
 	Wizard player1(100, 100);
-	player1.SetPosition(600, 400);
+	player1.SetPosition(600, 400, 3.141 / 8.0);
 	game.AddWizard(&player1);
 
 

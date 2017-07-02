@@ -7,23 +7,23 @@ class Wizard
 public:
 	Wizard(int maxHealth, int maxMana);
 
-	void SetPosition(int x, int y);
+	void SetPosition(double x, double y, double r);
 
-	void MoveLeft();
+	void MoveLeft(double displacement);
 
-	void MoveRight();
+	void MoveRight(double displacement);
 
-	void MoveDown();
+	void MoveBackward(double displacement);
 
-	void MoveUp();
+	void MoveForward(double displacement);
 
 	void StartAttack();
 
 	void StopAttack();
 
-	void RotateLeft();
+	void RotateLeft(double angle);
 
-	void RotateRight();
+	void RotateRight(double angle);
 
 	void OnUpdate();
 
@@ -36,11 +36,11 @@ public:
 	int getMana();
 
 private:
-	int xPosition;
+	double xPosition;
 
-	int yPosition;
+	double yPosition;
 
-	int rotation;
+	double rotation;
 
 	int health;
 
