@@ -3,14 +3,18 @@
 #include "MainMenu.h"
 #include "ResourceBar.h"
 #include "ManaBar.h"
+#include "Game.h"
 #include "MainMenuStates.h"
+#include "Wizard.h"
 
 int main(int argc, char ** argv)
 {
 	const int WindowSizeX = 1280;
 	const int WindowSizeY = 720;
 
-	sf::RenderWindow window(sf::VideoMode(WindowSizeX, WindowSizeY, 32), "SFML works!");
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 5;
+	sf::RenderWindow window(sf::VideoMode(WindowSizeX, WindowSizeY, 32), "SFML works!", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
 
 	MainMenu mainMenu(sf::Vector2u(WindowSizeX, WindowSizeY));
@@ -20,8 +24,14 @@ int main(int argc, char ** argv)
 
 	manaBar.SetPosition(sf::Vector2f(0, 200));
 
+	GameSpace::Game game;
+	Wizard player1(100, 100);
+	player1.SetPosition(600, 400);
+	game.AddWizard(&player1);
+
+
 	sf::Clock clock;
-	MainMenuStates mainMenuStates = MainMenuStates::None;
+	MainMenuStates mainMenuStates = MainMenuStates::Game;
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -92,9 +102,15 @@ int main(int argc, char ** argv)
 		{
 		case MainMenuStates::None:
 			//update scene in menu
+			mainMenu.OnDraw(window);
+			manaBar.OnDraw(window);
+			hpBar.OnDraw(window);
 			break;
 		case MainMenuStates::Game:
 			// update scene in gameplay
+			hpBar.OnDraw(window);
+			manaBar.OnDraw(window);
+			game.OnDraw(window);
 			break;
 		case MainMenuStates::Settings:
 			// update scene in setting section
@@ -105,11 +121,6 @@ int main(int argc, char ** argv)
 		default:
 			throw "Not supported exception.";
 		}
-
-		mainMenu.OnDraw(window);
-		hpBar.OnDraw(window);
-		manaBar.OnDraw(window);
-
 		window.display();
 	}
 

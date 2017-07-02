@@ -7,6 +7,8 @@ class Wizard
 public:
 	Wizard(int maxHealth, int maxMana);
 
+	void SetPosition(int x, int y);
+
 	void MoveLeft();
 
 	void MoveRight();
@@ -24,6 +26,8 @@ public:
 	void RotateRight();
 
 	void OnUpdate();
+
+	void OnDraw(sf::RenderWindow & window);
 
 	void TakeDamage(int damage);
 
