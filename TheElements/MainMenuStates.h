@@ -2,10 +2,9 @@
 
 enum MainMenuStates
 {
-	None = 0,
-	Game = 1,
+	Game = 0,
 	Settings,
 	Authors,
-	Exit
-
+	Exit,
+	None = 99
 };

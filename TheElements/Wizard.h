@@ -31,6 +31,8 @@ public:
 
 	int getMana();
 
+	void OnDraw(sf::RenderWindow& window);
+
 private:
 	int xPosition;
 
@@ -41,4 +43,8 @@ private:
 	int health;
 
 	int mana;
+
+	sf::Sprite wizardSprite;
+
+	sf::Texture texture;
 };
