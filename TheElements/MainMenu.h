@@ -7,11 +7,14 @@ public:
 
 	MainMenu(sf::Vector2u windowSize);
 
-	void OnUpdate(float wavePhase);
+	void OnUpdate(sf::Vector2i mousePosition, float wavePhase);
 
 	void OnDraw(sf::RenderWindow& window);
 
+
 private:
+
+	int currentOption;
 
 	sf::Font menuFont;
 

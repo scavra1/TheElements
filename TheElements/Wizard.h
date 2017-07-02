@@ -1,20 +1,44 @@
 #pragma once
-
+#include "ResourceBar.h"
+#include "ManaBar.h"
 class Wizard
 {
 
 public:
-	 Wizard(int maxHealth, int maxMana);
+	Wizard(int maxHealth, int maxMana);
 
+	void MoveLeft();
 
-private:
-	
-	int health;
+	void MoveRight();
 
-	int mana;
+	void MoveDown();
+
+	void MoveUp();
 
 	void StartAttack();
 
 	void StopAttack();
 
+	void RotateLeft();
+
+	void RotateRight();
+
+	void OnUpdate();
+
+	void TakeDamage(int damage);
+
+	int getHealth();
+
+	int getMana();
+
+private:
+	int xPosition;
+
+	int yPosition;
+
+	int rotation;
+
+	int health;
+
+	int mana;
 };

@@ -134,12 +134,15 @@
     <ClCompile Include="ManaBar.cpp" />
     <ClCompile Include="PlayerConfig.cpp" />
     <ClCompile Include="ResourceBar.cpp" />
+    <ClCompile Include="UpdateController.cpp" />
     <ClCompile Include="Wizard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="MainMenuStates.h" />
     <ClInclude Include="ManaBar.h" />
     <ClInclude Include="ResourceBar.h" />
+    <ClInclude Include="UpdateController.h" />
     <ClInclude Include="Wizard.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -24,10 +24,21 @@ MainMenu::MainMenu(sf::Vector2u windowSize)
 
 	if (!this->menuShader.loadFromFile("shaders/wave.vert", "shaders/blur.frag"))
 		throw std::string("Could not load shaders in menu loader.");
+
+	this->currentOption = -1;
 }
 
-void MainMenu::OnUpdate(float wavePhase)
+void MainMenu::OnUpdate(sf::Vector2i mousePosition, float wavePhase)
 {
+	currentOption = -1;
+	for (int i = 0; i < this->options.size(); i++)
+	{
+		if (this->options[i].getGlobalBounds().contains(mousePosition.x, mousePosition.y))
+		{
+			this->currentOption = i;
+		}
+	}
+
 	this->menuShader.setUniform("wave_phase", wavePhase);
 	this->menuShader.setUniform("wave_amplitude", sf::Vector2f(5, 5));
 	this->menuShader.setUniform("blur_radius", 0.0f);
@@ -36,15 +47,15 @@ void MainMenu::OnUpdate(float wavePhase)
 void MainMenu::OnDraw(sf::RenderWindow & window)
 {
 	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-	for each (sf::Text option in options)
+	for (size_t i = 0; i < this->options.size(); i++)
 	{
-		if (option.getGlobalBounds().contains(mousePosition.x, mousePosition.y))
+		if (i == this->currentOption)
 		{
-			window.draw(option, &this->menuShader);
+			window.draw(this->options[i], &this->menuShader);
 		}
 		else
 		{
-			window.draw(option);
+			window.draw(this->options[i]);
 		}
 	}
 }
