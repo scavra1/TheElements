@@ -14,7 +14,7 @@ int main(int argc, char ** argv)
 
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 5;
-	sf::RenderWindow window(sf::VideoMode(WindowSizeX, WindowSizeY, 32), "SFML works!", sf::Style::Default, settings);
+	sf::RenderWindow window(sf::VideoMode(WindowSizeX, WindowSizeY, 32), "The Elements", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
 
 	MainMenu mainMenu(sf::Vector2u(WindowSizeX, WindowSizeY));
