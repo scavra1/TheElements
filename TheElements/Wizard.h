@@ -7,23 +7,27 @@ class Wizard
 public:
 	Wizard(int maxHealth, int maxMana);
 
-	void MoveLeft();
+	void SetPosition(double x, double y, double r);
 
-	void MoveRight();
+	void MoveLeft(double displacement);
 
-	void MoveDown();
+	void MoveRight(double displacement);
 
-	void MoveUp();
+	void MoveBackward(double displacement);
+
+	void MoveForward(double displacement);
 
 	void StartAttack();
 
 	void StopAttack();
 
-	void RotateLeft();
+	void RotateLeft(double angle);
 
-	void RotateRight();
+	void RotateRight(double angle);
 
 	void OnUpdate();
+
+	void OnDraw(sf::RenderWindow & window);
 
 	void TakeDamage(int damage);
 
@@ -31,14 +35,12 @@ public:
 
 	int getMana();
 
-	void OnDraw(sf::RenderWindow& window);
-
 private:
-	int xPosition;
+	double xPosition;
 
-	int yPosition;
+	double yPosition;
 
-	int rotation;
+	double rotation;
 
 	int health;
 

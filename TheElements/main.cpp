@@ -13,16 +13,13 @@ int main(int argc, char ** argv)
 	const int WindowSizeX = 1280;
 	const int WindowSizeY = 720;
 
-	sf::RenderWindow window(sf::VideoMode(WindowSizeX, WindowSizeY, 32), "SFML works!");
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 5;
+	sf::RenderWindow window(sf::VideoMode(WindowSizeX, WindowSizeY, 32), "The Elements", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
 
 	MainMenu mainMenu(sf::Vector2u(WindowSizeX, WindowSizeY));
 	MainMenuController mainMenuController(&window, &mainMenu);
-
-	//ResourceBar hpBar(50, 200);
-	//ManaBar manaBar(400, 1000);
-
-	//manaBar.SetPosition(sf::Vector2f(0, 200));
 
 	GamePlayController gamePlayController(&window);
 
@@ -58,8 +55,6 @@ int main(int argc, char ** argv)
 			break;
 		case MainMenuStates::Game:
 			gamePlayController.UpdateGamePlay();
-			//hpBar.OnUpdate();
-			//manaBar.OnUpdate();
 			// update scene in gameplay
 			break;
 		case MainMenuStates::Settings:
@@ -82,13 +77,10 @@ int main(int argc, char ** argv)
 		{
 		case MainMenuStates::None:
 			mainMenuController.DrawMainMenu();
-			//update scene in menu
 			break;
 		case MainMenuStates::Game:
 			gamePlayController.DrawGamePlay();
-//			hpBar.OnDraw(window);
-			//manaBar.OnDraw(window);
-			// update scene in gameplay
+			//game.OnDraw(window);
 			break;
 		case MainMenuStates::Settings:
 			// update scene in setting section
@@ -99,10 +91,6 @@ int main(int argc, char ** argv)
 		default:
 			throw "Not supported exception.";
 		}
-
-
-
-
 		window.display();
 	}
 

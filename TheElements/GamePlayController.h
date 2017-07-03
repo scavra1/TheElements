@@ -2,7 +2,7 @@
 #include "ManaBar.h"
 #include "ResourceBar.h"
 #include "Wizard.h"
-
+#include "SpellBar.h"
 
 class GamePlayController
 {
@@ -32,5 +32,9 @@ private:
 	ManaBar* playerOneMana;
 
 	ManaBar* playerTwoMana;
+
+	SpellBar* playerOneSpellBar;
+
+	SpellBar* playerTwoSpellBar;
 
 };

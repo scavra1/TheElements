@@ -39,6 +39,7 @@ void ResourceBar::SetPosition(sf::Vector2f position)
 void ResourceBar::OnUpdate()
 {
 	this->shader.setUniform("loadRatio", ((float)this->load / this->maximumCapacity));
+	this->shader.setUniform("beginPosition", (float)this->barSprite.getPosition().x);
 }
 
 void ResourceBar::OnDraw(sf::RenderWindow & window)

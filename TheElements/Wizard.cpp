@@ -1,4 +1,6 @@
 #include "Wizard.h"
+#include <math.h>
+# define M_PI           3.14159265358979323846  /* pi */
 
 
 Wizard::Wizard(int maxHealth, int maxMana)
@@ -9,29 +11,41 @@ Wizard::Wizard(int maxHealth, int maxMana)
 	if (!this->texture.loadFromFile("textures/wizard.png"))
 		throw "Could not load texture in wizard loader.";
 
+	this->wizardSprite.setOrigin(sf::Vector2f(15, 24));
 	this->wizardSprite.setTexture(this->texture);
-	this->rotation = 90;
+	this->rotation = M_PI / 2.0;
 
 }
 
-void Wizard::MoveLeft()
+void Wizard::SetPosition(double x, double y, double r)
 {
-	this->xPosition -= 1;
+	this->xPosition = x;
+	this->yPosition = y;
+	this->rotation = r;
 }
 
-void Wizard::MoveRight()
+void Wizard::MoveLeft(double displacement)
 {
-	this->xPosition += 1;
+	this->yPosition -= displacement * cos(this->rotation - M_PI / 2);
+	this->xPosition += displacement * sin(this->rotation - M_PI / 2);
 }
 
-void Wizard::MoveDown()
+void Wizard::MoveRight(double displacement)
 {
-	this->yPosition += 1;
+	this->yPosition -= displacement * cos(this->rotation + M_PI / 2);
+	this->xPosition += displacement * sin(this->rotation + M_PI / 2);
 }
 
-void Wizard::MoveUp()
+void Wizard::MoveBackward(double displacement)
 {
-	this->yPosition -= 1;
+	this->yPosition -= displacement * cos(this->rotation + M_PI);
+	this->xPosition += displacement * sin(this->rotation + M_PI);
+}
+
+void Wizard::MoveForward(double displacement)
+{
+	this->yPosition -= displacement * cos(this->rotation);
+	this->xPosition += displacement * sin(this->rotation);
 }
 
 void Wizard::StartAttack()
@@ -44,17 +58,23 @@ void Wizard::StopAttack()
 
 }
 
-void Wizard::RotateLeft()
+void Wizard::RotateLeft(double angle)
 {
-	this->rotation += 5;
+	this->rotation -= angle;
 }
 
-void Wizard::RotateRight()
+void Wizard::RotateRight(double angle)
 {
-	this->rotation -= 5;
+	this->rotation += angle;
 }
 
 
+
+void Wizard::OnDraw(sf::RenderWindow & window)
+{
+
+	window.draw(this->wizardSprite);
+}
 
 void Wizard::TakeDamage(int damage)
 {
@@ -73,11 +93,6 @@ int Wizard::getMana()
 
 void Wizard::OnUpdate()
 {
-	this->wizardSprite.setRotation((float)this->rotation / 360);
+	this->wizardSprite.setRotation(this->rotation * 180 / M_PI);
 	this->wizardSprite.setPosition(this->xPosition, this->yPosition);
-}
-
-void Wizard::OnDraw(sf::RenderWindow& window)
-{
-	window.draw(this->wizardSprite);
 }
