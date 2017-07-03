@@ -1,4 +1,5 @@
 #include "GamePlayController.h"
+#include <iostream>
 
 GamePlayController::GamePlayController(sf::RenderWindow * window)
 {
@@ -54,6 +55,16 @@ void GamePlayController::UpdateGamePlay()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) this->playerTwo->MoveRight(sidewaysSpeed);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) this->playerTwo->RotateLeft(rotateSpeed);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) this->playerTwo->RotateRight(rotateSpeed);
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		std::cout << playerOne->calculateCorners()[0].first << ", " << playerOne->calculateCorners()[0].second << "\n";
+
+	for (Block block : this->blocks) {
+		//Check collision for playerOne
+		if (playerOne->checkCollision(block))
+			std::cout << "Collision\n";
+		//Check collision for playerTwo
+	}
 }
 
 void GamePlayController::PollGamePlayEvents()

@@ -22,3 +22,11 @@ void Block::OnDraw(sf::RenderWindow & window)
 	rectangle.setFillColor(sf::Color(100, 250, 50));
 	window.draw(rectangle);
 }
+
+bool Block::containsPoint(double pointX, double pointY)
+{
+	return	pointX > this->x - this->width / 2 &&
+			pointX < this->x + this->width / 2 &&
+			pointY > this->y - this->height / 2 &&
+			pointY < this->y + this->height / 2;
+}

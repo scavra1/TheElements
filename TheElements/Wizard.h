@@ -1,6 +1,9 @@
 #pragma once
 #include "ResourceBar.h"
 #include "ManaBar.h"
+#include "Block.h"
+#include <utility>
+#include <vector>
 class Wizard
 {
 
@@ -30,6 +33,10 @@ public:
 	void OnDraw(sf::RenderWindow & window);
 
 	void TakeDamage(int damage);
+
+	bool checkCollision(Block block);
+
+	std::vector<std::pair<double, double>> calculateCorners();
 
 	int getHealth();
 

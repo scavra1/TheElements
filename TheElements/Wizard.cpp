@@ -1,7 +1,7 @@
 #include "Wizard.h"
 #include <math.h>
+#include <utility>
 # define M_PI           3.14159265358979323846  /* pi */
-
 
 Wizard::Wizard(int maxHealth, int maxMana)
 {
@@ -79,6 +79,42 @@ void Wizard::OnDraw(sf::RenderWindow & window)
 void Wizard::TakeDamage(int damage)
 {
 	health -= damage;
+}
+
+bool Wizard::checkCollision(Block block)
+{
+	std::vector<std::pair<double, double>> corners = this->calculateCorners();
+	if (block.containsPoint(corners[0].first, corners[0].second))
+		return true;
+	if (block.containsPoint(corners[1].first, corners[1].second))
+		return true;
+	if (block.containsPoint(corners[2].first, corners[2].second))
+		return true;
+	if (block.containsPoint(corners[3].first, corners[3].second))
+		return true;
+	return false;
+}
+
+std::vector<std::pair<double, double>> Wizard::calculateCorners()
+{
+	double width = 30;
+	double height = 48;
+	std::vector<std::pair<double, double>> corners;
+	corners.push_back(std::pair<double, double>(this->xPosition - width / 2, this->yPosition - height / 2));
+	corners.push_back(std::pair<double, double>(this->xPosition + width / 2, this->yPosition - height / 2));
+	corners.push_back(std::pair<double, double>(this->xPosition + width / 2, this->yPosition + height / 2));
+	corners.push_back(std::pair<double, double>(this->xPosition - width / 2, this->yPosition + height / 2));
+
+	//Rotation
+	double s = sin(this->rotation);
+	double c = cos(this->rotation);
+	for (int i = 0; i < 4; i++) {
+		double x = (corners[i].first - this->xPosition) * c - (corners[i].second - this->yPosition) * s;
+		double y = (corners[i].first - this->xPosition) * s + (corners[i].second - this->yPosition) * c;
+		corners[i].first = x + this->xPosition;
+		corners[i].second = y + this->yPosition;
+	}
+	return corners;
 }
 
 int Wizard::getHealth()
