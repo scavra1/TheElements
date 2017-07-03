@@ -71,13 +71,8 @@ void Wizard::RotateRight(double angle)
 
 void Wizard::OnDraw(sf::RenderWindow & window)
 {
-	sf::CircleShape shape(40, 3);
-	shape.setFillColor(sf::Color::Blue);
-	shape.setPosition(this->xPosition, this->yPosition);
-	shape.rotate(this->rotation * 180.0 / M_PI);
-	window.draw(shape);
 
-	//window.draw(this->wizardSprite);
+	window.draw(this->wizardSprite);
 }
 
 void Wizard::TakeDamage(int damage)
@@ -97,6 +92,6 @@ int Wizard::getMana()
 
 void Wizard::OnUpdate()
 {
-	this->wizardSprite.setRotation((float)this->rotation / 360);
+	this->wizardSprite.setRotation(this->rotation * 180 / M_PI);
 	this->wizardSprite.setPosition(this->xPosition, this->yPosition);
 }

@@ -31,6 +31,9 @@ void GamePlayController::UpdateGamePlay()
 	this->playerTwoHealth->OnUpdate();
 	this->playerTwoMana->OnUpdate();
 
+	this->playerOne->OnUpdate();
+	this->playerTwo->OnUpdate();
+
 	const double straightSpeed = 4.0;
 	const double sidewaysSpeed = 3.0;
 	const double rotateSpeed = 0.03;
