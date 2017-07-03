@@ -2,6 +2,8 @@
 #include "ManaBar.h"
 #include "ResourceBar.h"
 #include "Wizard.h"
+#include "Block.h"
+#include <vector>
 
 
 class GamePlayController
@@ -32,5 +34,7 @@ private:
 	ManaBar* playerOneMana;
 
 	ManaBar* playerTwoMana;
+
+	std::vector<Block> blocks;
 
 };

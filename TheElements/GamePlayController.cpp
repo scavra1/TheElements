@@ -20,6 +20,9 @@ GamePlayController::GamePlayController(sf::RenderWindow * window)
 	playerTwoHealth->SetPosition(sf::Vector2f(1000, 20));
 	playerTwoMana->SetPosition(sf::Vector2f(1000, 50));
 
+	this->blocks.push_back(Block(400, 200, 100, 200));
+	this->blocks.push_back(Block(600, 500, 200, 100));
+
 	this->window = window;
 }
 
@@ -77,4 +80,8 @@ void GamePlayController::DrawGamePlay()
 
 	this->playerOne->OnDraw(*this->window);
 	this->playerTwo->OnDraw(*this->window);
+	
+	for (Block block : this->blocks) {
+		block.OnDraw(*this->window);
+	}
 }
