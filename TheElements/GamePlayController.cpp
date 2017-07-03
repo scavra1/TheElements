@@ -42,28 +42,48 @@ void GamePlayController::UpdateGamePlay()
 	const double sidewaysSpeed = 3.0;
 	const double rotateSpeed = 0.03;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) this->playerOne->MoveForward(straightSpeed);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) this->playerOne->MoveBackward(straightSpeed);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) this->playerOne->MoveLeft(sidewaysSpeed);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) this->playerOne->MoveRight(sidewaysSpeed);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) this->playerOne->RotateLeft(rotateSpeed);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) this->playerOne->RotateRight(rotateSpeed);
+	double straightDistance1 = 0.0;
+	double sidewaysDistance1 = 0.0;
+	double rotation1 = 0.0;
+	double straightDistance2 = 0.0;
+	double sidewaysDistance2 = 0.0;
+	double rotation2 = 0.0;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) this->playerTwo->MoveForward(straightSpeed);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) this->playerTwo->MoveBackward(straightSpeed);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) this->playerTwo->MoveLeft(sidewaysSpeed);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) this->playerTwo->MoveRight(sidewaysSpeed);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) this->playerTwo->RotateLeft(rotateSpeed);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) this->playerTwo->RotateRight(rotateSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) straightDistance1 += straightSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) straightDistance1 -= straightSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) sidewaysDistance1 -= sidewaysSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) sidewaysDistance1 += sidewaysSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) rotation1 -= rotateSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) rotation1 += rotateSpeed;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		std::cout << playerOne->calculateCorners()[0].first << ", " << playerOne->calculateCorners()[0].second << "\n";
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) straightDistance2 += straightSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) straightDistance2 -= straightSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) sidewaysDistance2 -= sidewaysSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) sidewaysDistance2 += sidewaysSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) rotation2 -= rotateSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) rotation2 += rotateSpeed;
 
+	playerOne->MoveForward(straightDistance1);
+	playerOne->MoveRight(sidewaysDistance1);
+	playerOne->RotateRight(rotation1);
+	playerTwo->MoveForward(straightDistance2);
+	playerTwo->MoveRight(sidewaysDistance2);
+	playerTwo->RotateRight(rotation2);
+
+	//Check collisions
 	for (Block block : this->blocks) {
-		//Check collision for playerOne
 		if (playerOne->checkCollision(block))
-			std::cout << "Collision\n";
-		//Check collision for playerTwo
+		{
+			playerOne->MoveForward(-straightDistance1);
+			playerOne->MoveRight(-sidewaysDistance1);
+			playerOne->RotateRight(-rotation1);
+		}
+		if (playerTwo->checkCollision(block))
+		{
+			playerTwo->MoveForward(-straightDistance2);
+			playerTwo->MoveRight(-sidewaysDistance2);
+			playerTwo->RotateRight(-rotation2);
+		}
 	}
 }
 
