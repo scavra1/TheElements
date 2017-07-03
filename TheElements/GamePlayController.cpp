@@ -30,6 +30,24 @@ void GamePlayController::UpdateGamePlay()
 
 	this->playerTwoHealth->OnUpdate();
 	this->playerTwoMana->OnUpdate();
+
+	const double straightSpeed = 4.0;
+	const double sidewaysSpeed = 3.0;
+	const double rotateSpeed = 0.03;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) this->playerOne->MoveForward(straightSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) this->playerOne->MoveBackward(straightSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) this->playerOne->MoveLeft(sidewaysSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) this->playerOne->MoveRight(sidewaysSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) this->playerOne->RotateLeft(rotateSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) this->playerOne->RotateRight(rotateSpeed);
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) this->playerTwo->MoveForward(straightSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) this->playerTwo->MoveBackward(straightSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) this->playerTwo->MoveLeft(sidewaysSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) this->playerTwo->MoveRight(sidewaysSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) this->playerTwo->RotateLeft(rotateSpeed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) this->playerTwo->RotateRight(rotateSpeed);
 }
 
 void GamePlayController::PollGamePlayEvents()

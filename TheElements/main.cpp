@@ -55,8 +55,6 @@ int main(int argc, char ** argv)
 			break;
 		case MainMenuStates::Game:
 			gamePlayController.UpdateGamePlay();
-			//hpBar.OnUpdate();
-			//manaBar.OnUpdate();
 			// update scene in gameplay
 			break;
 		case MainMenuStates::Settings:
