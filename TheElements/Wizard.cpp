@@ -11,6 +11,7 @@ Wizard::Wizard(int maxHealth, int maxMana)
 	if (!this->texture.loadFromFile("textures/wizard.png"))
 		throw "Could not load texture in wizard loader.";
 
+	this->wizardSprite.setOrigin(sf::Vector2f(15, 24));
 	this->wizardSprite.setTexture(this->texture);
 	this->rotation = M_PI / 2.0;
 
