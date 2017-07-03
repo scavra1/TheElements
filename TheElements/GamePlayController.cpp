@@ -71,18 +71,33 @@ void GamePlayController::UpdateGamePlay()
 	playerTwo->RotateRight(rotation2);
 
 	//Check collisions
+	const double bounceRotation = 0.1;
 	for (Block block : this->blocks) {
 		if (playerOne->checkCollision(block))
 		{
-			playerOne->MoveForward(-straightDistance1);
-			playerOne->MoveRight(-sidewaysDistance1);
-			playerOne->RotateRight(-rotation1);
+			playerOne->RotateRight(bounceRotation);
+			if (playerOne->checkCollision(block)) {
+				playerOne->RotateRight(-bounceRotation * 2);
+				if (playerOne->checkCollision(block)) {
+					playerOne->RotateRight(bounceRotation);
+					playerOne->MoveForward(-straightDistance1);
+					playerOne->MoveRight(-sidewaysDistance1);
+					playerOne->RotateRight(-rotation1);
+				}
+			}
 		}
 		if (playerTwo->checkCollision(block))
 		{
-			playerTwo->MoveForward(-straightDistance2);
-			playerTwo->MoveRight(-sidewaysDistance2);
-			playerTwo->RotateRight(-rotation2);
+			playerTwo->RotateRight(bounceRotation);
+			if (playerTwo->checkCollision(block)) {
+				playerTwo->RotateRight(-bounceRotation * 2);
+				if (playerTwo->checkCollision(block)) {
+					playerTwo->RotateRight(bounceRotation);
+					playerTwo->MoveForward(-straightDistance2);
+					playerTwo->MoveRight(-sidewaysDistance2);
+					playerTwo->RotateRight(-rotation2);
+				}
+			}
 		}
 	}
 }
