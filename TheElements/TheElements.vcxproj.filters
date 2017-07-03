@@ -29,10 +29,10 @@
     <ClCompile Include="ManaBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UpdateController.cpp">
+    <ClCompile Include="MainMenuController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
+    <ClCompile Include="GamePlayController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -49,13 +49,13 @@
     <ClInclude Include="ManaBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UpdateController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MainMenuStates.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="MainMenuController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

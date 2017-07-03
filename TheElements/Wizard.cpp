@@ -7,6 +7,13 @@ Wizard::Wizard(int maxHealth, int maxMana)
 {
 	this->health = maxHealth;
 	this->mana = maxMana;
+
+	if (!this->texture.loadFromFile("textures/wizard.png"))
+		throw "Could not load texture in wizard loader.";
+
+	this->wizardSprite.setTexture(this->texture);
+	this->rotation = M_PI / 2.0;
+
 }
 
 void Wizard::SetPosition(double x, double y, double r)
@@ -60,10 +67,7 @@ void Wizard::RotateRight(double angle)
 	this->rotation += angle;
 }
 
-void Wizard::OnUpdate()
-{
 
-}
 
 void Wizard::OnDraw(sf::RenderWindow & window)
 {
@@ -72,6 +76,8 @@ void Wizard::OnDraw(sf::RenderWindow & window)
 	shape.setPosition(this->xPosition, this->yPosition);
 	shape.rotate(this->rotation * 180.0 / M_PI);
 	window.draw(shape);
+
+	//window.draw(this->wizardSprite);
 }
 
 void Wizard::TakeDamage(int damage)
@@ -87,4 +93,10 @@ int Wizard::getHealth()
 int Wizard::getMana()
 {
 	return this->mana;
+}
+
+void Wizard::OnUpdate()
+{
+	this->wizardSprite.setRotation((float)this->rotation / 360);
+	this->wizardSprite.setPosition(this->xPosition, this->yPosition);
 }

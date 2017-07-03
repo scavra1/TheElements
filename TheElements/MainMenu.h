@@ -11,7 +11,7 @@ public:
 
 	void OnDraw(sf::RenderWindow& window);
 
-
+	int GetCurrentOption();
 private:
 
 	int currentOption;

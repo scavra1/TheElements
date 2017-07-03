@@ -6,19 +6,24 @@ MainMenu::MainMenu(sf::Vector2u windowSize)
 		throw std::string("Could not load font in menu loader.");
 
 	sf::Text newGame("New Game", this->menuFont, 70);
+	sf::Text settings("Settings", this->menuFont, 70);
 	sf::Text authors("Authors", this->menuFont, 70);
 	sf::Text exit("Exit", this->menuFont, 70);
 
 	newGame.setFillColor(sf::Color::Red);
 	newGame.setPosition((windowSize.x - newGame.getLocalBounds().width) / 2, 50);
 
+	settings.setFillColor(sf::Color::Red);
+	settings.setPosition((windowSize.x - settings.getLocalBounds().width) / 2, 150);
+
 	authors.setFillColor(sf::Color::Red);
-	authors.setPosition((windowSize.x - authors.getLocalBounds().width) / 2, 150);
+	authors.setPosition((windowSize.x - authors.getLocalBounds().width) / 2, 250);
 
 	exit.setFillColor(sf::Color::Red);
-	exit.setPosition((windowSize.x - exit.getLocalBounds().width) / 2, 250);
+	exit.setPosition((windowSize.x - exit.getLocalBounds().width) / 2, 350);
 
 	options.push_back(newGame);
+	options.push_back(settings);
 	options.push_back(authors);
 	options.push_back(exit);
 
@@ -58,6 +63,11 @@ void MainMenu::OnDraw(sf::RenderWindow & window)
 			window.draw(this->options[i]);
 		}
 	}
+}
+
+int MainMenu::GetCurrentOption()
+{
+	return this->currentOption;
 }
 
 

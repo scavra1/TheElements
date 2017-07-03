@@ -45,4 +45,8 @@ private:
 	int health;
 
 	int mana;
+
+	sf::Sprite wizardSprite;
+
+	sf::Texture texture;
 };
