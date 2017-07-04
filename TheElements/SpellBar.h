@@ -24,7 +24,7 @@ private:
 
 	sf::Sprite waterSpellSprite;
 
-	sf::Sprite airSpellSprite;
+	sf::Sprite shadowSpellSprite;
 
 	sf::Sprite earthSpellSprite;
 
@@ -35,7 +35,7 @@ private:
 
 	sf::Texture waterSpellTexture;
 
-	sf::Texture airSpellTexture;
+	sf::Texture shadowSpellTexture;
 
 	sf::Texture earthSpellTexture;
 
@@ -46,7 +46,7 @@ private:
 
 	sf::Clock waterSpellCooldown;
 
-	sf::Clock airSpellCooldown;
+	sf::Clock shadowSpellCooldown;
 
 	sf::Clock earthSpellCooldown;
 

@@ -2,14 +2,20 @@
 
 SpellBar::SpellBar()
 {
-	if (!this->fireSpellTexture.loadFromFile("textures/fireSpell.png"))
+	if (!this->fireSpellTexture.loadFromFile("textures/fireSpell2.png"))
 		throw "Could not load spell textures in spell bar loader.";
 
-	//|| !this->waterSpellTexture.loadFromFile("textures/waterSpell.png")
-	//|| !this->airSpellTexture.loadFromFile("textures/airSpell.png")
-	//|| !this->earthSpellTexture.loadFromFile("textures/earthSpell.png")
+	if(!this->waterSpellTexture.loadFromFile("textures/waterSpell2.png"))
+		throw "Could not load spell textures in spell bar loader.";
 
-	if (!this->cooldownSheathTexture.loadFromFile("textures/cooldownSheath.png"))
+	if(!this->shadowSpellTexture.loadFromFile("textures/shadowSpell2.png"))
+		throw "Could not load spell textures in spell bar loader.";
+	
+	if(!this->earthSpellTexture.loadFromFile("textures/earthSpell2.png"))
+		throw "Could not load spell textures in spell bar loader.";
+
+
+	if (!this->cooldownSheathTexture.loadFromFile("textures/cooldownSheath2.png"))
 		throw "Could not load spell textures in spell bar loader.";
 
 
@@ -21,25 +27,28 @@ SpellBar::SpellBar()
 
 
 	this->fireSpellSprite.setTexture(this->fireSpellTexture);
-	//this->waterSpellSprite.setTexture(this->waterSpellTexture);
-	//this->airSpellSprite.setTexture(this->airSpellTexture);
-	//this->earthSpellSprite.setTexture(this->earthSpellTexture);
+	this->waterSpellSprite.setTexture(this->waterSpellTexture);
+	this->shadowSpellSprite.setTexture(this->shadowSpellTexture);
+	this->earthSpellSprite.setTexture(this->earthSpellTexture);
 
 
 	this->cooldownSheathSprite.setTexture(this->cooldownSheathTexture);
 
 	this->fireSpellCooldown.restart();
-	this->cooldownShader.setUniform("sheathSize", (int)fireSpellTexture.getSize().x);
+	this->waterSpellCooldown.restart();
+	this->shadowSpellCooldown.restart();
+
+	this->cooldownShader.setUniform("sheathSize", (int)this->cooldownSheathTexture.getSize().x);
 }
 
 bool SpellBar::IsSpellReady(Elements element)
 {
 	switch (element)
 	{
-	case Elements::Air: return this->airSpellCooldown.getElapsedTime().asSeconds() > 3.0f;
 	case Elements::Fire: return this->fireSpellCooldown.getElapsedTime().asSeconds() > 3.0f;
 	case Elements::Water: return this->waterSpellCooldown.getElapsedTime().asSeconds() > 3.0f;
 	case Elements::Earth: return this->earthSpellCooldown.getElapsedTime().asSeconds() > 3.0f;
+	case Elements::Shadow: return this->shadowSpellCooldown.getElapsedTime().asSeconds() > 3.0f;
 	}
 }
 
@@ -47,10 +56,10 @@ void SpellBar::UseSpell(Elements element)
 {
 	switch (element)
 	{
-	case Elements::Air: this->airSpellCooldown.restart(); break;
 	case Elements::Fire: this->fireSpellCooldown.restart(); break;
 	case Elements::Water: this->waterSpellCooldown.restart(); break;
 	case Elements::Earth: this->earthSpellCooldown.restart(); break;
+	case Elements::Shadow: this->shadowSpellCooldown.restart(); break;
 	}
 }
 
@@ -60,29 +69,45 @@ void SpellBar::OnUpdate()
 
 void SpellBar::OnDraw(sf::RenderWindow& window)
 {
-	//this->cooldownShader.setUniform("cooldown", airSpellCooldown.getElapsedTime().asSeconds() / 3.0f);
-	//window.draw(this->airSpellSprite, sf::RenderStates(&this->cooldownShader));
 	
-	this->cooldownShader.setUniform("cooldown", fireSpellCooldown.getElapsedTime().asSeconds() / 5.0f);
-	this->cooldownShader.setUniform("beginPosition", fireSpellSprite.getPosition().x);
-	this->cooldownSheathSprite.setPosition(fireSpellSprite.getPosition());
+	
+	this->cooldownShader.setUniform("cooldown", this->fireSpellCooldown.getElapsedTime().asSeconds() / 5.0f);
+	this->cooldownShader.setUniform("beginPosition", this->fireSpellSprite.getPosition().x);
+	this->cooldownSheathSprite.setPosition(this->fireSpellSprite.getPosition());
 	
 	window.draw(this->fireSpellSprite, sf::RenderStates(&this->spellShader));
 	window.draw(this->cooldownSheathSprite, sf::RenderStates(&this->cooldownShader));
-	//this->cooldownShader.setUniform("cooldown", waterSpellCooldown.getElapsedTime().asSeconds() / 3.0f);
-	//window.draw(this->waterSpellSprite, sf::RenderStates(&this->cooldownShader));
 
-	//this->cooldownShader.setUniform("cooldown", earthSpellCooldown.getElapsedTime().asSeconds() / 3.0f);
-	//window.draw(this->earthSpellSprite, sf::RenderStates(&this->cooldownShader));
+	this->cooldownShader.setUniform("cooldown", this->waterSpellCooldown.getElapsedTime().asSeconds() / 5.0f);
+	this->cooldownShader.setUniform("beginPosition", this->waterSpellSprite.getPosition().x);
+	this->cooldownSheathSprite.setPosition(this->waterSpellSprite.getPosition());
+
+	window.draw(this->waterSpellSprite, sf::RenderStates(&this->spellShader));
+	window.draw(this->cooldownSheathSprite, sf::RenderStates(&this->cooldownShader));
+
+	this->cooldownShader.setUniform("cooldown", this->shadowSpellCooldown.getElapsedTime().asSeconds() / 5.0f);
+	this->cooldownShader.setUniform("beginPosition", this->shadowSpellSprite.getPosition().x);
+	this->cooldownSheathSprite.setPosition(this->shadowSpellSprite.getPosition());
+
+	window.draw(this->shadowSpellSprite, sf::RenderStates(&this->spellShader));
+	window.draw(this->cooldownSheathSprite, sf::RenderStates(&this->cooldownShader));
+
+	this->cooldownShader.setUniform("cooldown", this->earthSpellCooldown.getElapsedTime().asSeconds() / 5.0f);
+	this->cooldownShader.setUniform("beginPosition", this->earthSpellSprite.getPosition().x);
+	this->cooldownSheathSprite.setPosition(this->earthSpellSprite.getPosition());
+
+	window.draw(this->earthSpellSprite, sf::RenderStates(&this->spellShader));
+	window.draw(this->cooldownSheathSprite, sf::RenderStates(&this->cooldownShader));
 }
 
 void SpellBar::SetElementPosition(sf::Vector2f position, Elements element)
 {
 	switch (element)
 	{
-	case Elements::Air: airSpellSprite.setPosition(position); break;
-	case Elements::Fire: fireSpellSprite.setPosition(position); break;
-	case Elements::Water: waterSpellSprite.setPosition(position); break;
-	case Elements::Earth: earthSpellSprite.setPosition(position); break;
+	
+	case Elements::Fire: this->fireSpellSprite.setPosition(position); break;
+	case Elements::Water: this->waterSpellSprite.setPosition(position); break;
+	case Elements::Earth: this->earthSpellSprite.setPosition(position); break;
+	case Elements::Shadow: this->shadowSpellSprite.setPosition(position); break;
 	}
 }

@@ -4,6 +4,6 @@ enum Elements
 {
 	Fire = 0,
 	Water,
-	Air,
+	Shadow,
 	Earth
 };
