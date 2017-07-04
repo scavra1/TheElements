@@ -3,23 +3,36 @@
 
 GamePlayController::GamePlayController(sf::RenderWindow * window)
 {
-	playerOne = new Wizard(200, 400);
-	playerTwo = new Wizard(200, 400);
+	this->playerOne = new Wizard(200, 400);
+	this->playerTwo = new Wizard(200, 400);
 
-	playerOne->SetPosition(100, 100, 3.14 / 2.0);
-	playerTwo->SetPosition(900, 500, 0);
+	this->playerOne->SetPosition(100, 100, 3.14 / 2.0);
+	this->playerTwo->SetPosition(900, 500, 0);
 
-	playerOneHealth = new ResourceBar(200, 200);
-	playerTwoHealth = new ResourceBar(200, 200);
+	this->playerOneHealth = new ResourceBar(200, 200);
+	this->playerTwoHealth = new ResourceBar(200, 200);
 
-	playerOneMana = new ManaBar(400, 400);
-	playerTwoMana = new ManaBar(400, 400);
+	this->playerOneMana = new ManaBar(400, 400);
+	this->playerTwoMana = new ManaBar(400, 400);
 
-	playerOneHealth->SetPosition(sf::Vector2f(0, 20));
-	playerOneMana->SetPosition(sf::Vector2f(0, 50));
+	this->playerOneHealth->SetPosition(sf::Vector2f(20, 20));
+	this->playerOneMana->SetPosition(sf::Vector2f(20, 45));
+	
+	this->playerTwoHealth->SetPosition(sf::Vector2f(1110, 20));
+	this->playerTwoMana->SetPosition(sf::Vector2f(1110, 45));
 
-	playerTwoHealth->SetPosition(sf::Vector2f(1000, 20));
-	playerTwoMana->SetPosition(sf::Vector2f(1000, 50));
+	this->playerOneSpellBar = new SpellBar();
+	this->playerTwoSpellBar = new SpellBar();
+
+	this->playerOneSpellBar->SetElementPosition(sf::Vector2f(25, 70), Elements::Fire);
+	this->playerOneSpellBar->SetElementPosition(sf::Vector2f(60, 70), Elements::Water);
+	this->playerOneSpellBar->SetElementPosition(sf::Vector2f(95, 70), Elements::Shadow);
+	this->playerOneSpellBar->SetElementPosition(sf::Vector2f(130, 70), Elements::Earth);
+
+	this->playerTwoSpellBar->SetElementPosition(sf::Vector2f(1115, 70), Elements::Fire);
+	this->playerTwoSpellBar->SetElementPosition(sf::Vector2f(1150, 70), Elements::Water);
+	this->playerTwoSpellBar->SetElementPosition(sf::Vector2f(1185, 70), Elements::Shadow);
+	this->playerTwoSpellBar->SetElementPosition(sf::Vector2f(1220, 70), Elements::Earth);
 
 	this->blocks.push_back(Block(400, 200, 100, 200));
 	this->blocks.push_back(Block(600, 500, 200, 100));
@@ -49,19 +62,22 @@ void GamePlayController::UpdateGamePlay()
 	double sidewaysDistance2 = 0.0;
 	double rotation2 = 0.0;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) straightDistance1 += straightSpeed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) straightDistance1 -= straightSpeed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) sidewaysDistance1 -= sidewaysSpeed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) sidewaysDistance1 += sidewaysSpeed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) rotation1 -= rotateSpeed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) rotation1 += rotateSpeed;
+	if (this->window->hasFocus())
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) straightDistance1 += straightSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) straightDistance1 -= straightSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) sidewaysDistance1 -= sidewaysSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) sidewaysDistance1 += sidewaysSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) rotation1 -= rotateSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) rotation1 += rotateSpeed;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) straightDistance2 += straightSpeed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) straightDistance2 -= straightSpeed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) sidewaysDistance2 -= sidewaysSpeed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) sidewaysDistance2 += sidewaysSpeed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) rotation2 -= rotateSpeed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) rotation2 += rotateSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) straightDistance2 += straightSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) straightDistance2 -= straightSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) sidewaysDistance2 -= sidewaysSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) sidewaysDistance2 += sidewaysSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) rotation2 -= rotateSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) rotation2 += rotateSpeed;
+	}
 
 	playerOne->MoveForward(straightDistance1);
 	playerOne->MoveRight(sidewaysDistance1);
@@ -100,6 +116,8 @@ void GamePlayController::UpdateGamePlay()
 			}
 		}
 	}
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) this->playerOneSpellBar->UseSpell(Elements::Fire);
 }
 
 void GamePlayController::PollGamePlayEvents()
@@ -123,6 +141,9 @@ void GamePlayController::DrawGamePlay()
 
 	this->playerTwoHealth->OnDraw(*this->window);
 	this->playerTwoMana->OnDraw(*this->window);
+
+	this->playerOneSpellBar->OnDraw(*this->window);
+	this->playerTwoSpellBar->OnDraw(*this->window);
 
 	this->playerOne->OnDraw(*this->window);
 	this->playerTwo->OnDraw(*this->window);

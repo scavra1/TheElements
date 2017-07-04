@@ -4,7 +4,7 @@
 #include "Wizard.h"
 #include "Block.h"
 #include <vector>
-
+#include "SpellBar.h"
 
 class GamePlayController
 {
@@ -36,5 +36,9 @@ private:
 	ManaBar* playerTwoMana;
 
 	std::vector<Block> blocks;
+
+	SpellBar* playerOneSpellBar;
+
+	SpellBar* playerTwoSpellBar;
 
 };

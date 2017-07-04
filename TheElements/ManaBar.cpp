@@ -39,6 +39,7 @@ void ManaBar::SetPosition(sf::Vector2f position)
 void ManaBar::OnUpdate()
 {
 	this->shader.setUniform("loadRatio", ((float)this->load / this->maximumCapacity));
+	this->shader.setUniform("beginPosition", (float)this->barSprite.getPosition().x);
 }
 
 void ManaBar::OnDraw(sf::RenderWindow & window)
