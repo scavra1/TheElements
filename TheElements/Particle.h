@@ -5,7 +5,7 @@ class Particle
 public:
 	Particle(double x, double y, double vx, double vy);
 	void OnUpdate(double dt);
-	void OnDraw(sf::RenderWindow & window);
+	void OnDraw(sf::RenderTarget & window);
 	bool isAlive();
 	void kill();
 	double getX() { return this->x; };

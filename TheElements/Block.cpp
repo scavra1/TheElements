@@ -15,7 +15,7 @@ Block::~Block()
 {
 }
 
-void Block::OnDraw(sf::RenderWindow & window)
+void Block::OnDraw(sf::RenderTarget & window)
 {
 	sf::RectangleShape rectangle(sf::Vector2f(this->width, this->height));
 	rectangle.setPosition(this->x - this->width / 2, this->y - this->height / 2);

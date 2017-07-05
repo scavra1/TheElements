@@ -42,7 +42,7 @@ void ResourceBar::OnUpdate()
 	this->shader.setUniform("beginPosition", (float)this->barSprite.getPosition().x);
 }
 
-void ResourceBar::OnDraw(sf::RenderWindow & window)
+void ResourceBar::OnDraw(sf::RenderTarget & window)
 {
 	window.draw(this->barSprite, sf::RenderStates(&this->shader));
 }

@@ -22,6 +22,8 @@ public:
 
 private:
 
+	bool isGamePaused;
+
 	sf::RenderWindow* window;
 
 	Wizard* playerOne;
@@ -45,5 +47,11 @@ private:
 	std::vector<Particle> playerOneParticles;
 
 	std::vector<Particle> playerTwoParticles;
+
+	sf::Shader pauseShader;
+
+	sf::Sprite gameSceneSprite;
+
+	sf::RenderTexture gameSceneTexture;
 
 };

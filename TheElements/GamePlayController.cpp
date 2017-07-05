@@ -38,6 +38,12 @@ GamePlayController::GamePlayController(sf::RenderWindow * window)
 	this->blocks.push_back(Block(600, 500, 200, 100));
 
 	this->window = window;
+
+	this->gameSceneTexture.create(1280, 720, false);
+	this->gameSceneSprite.setTexture(gameSceneTexture.getTexture());
+
+	if (!this->pauseShader.loadFromFile("shaders/wb.frag", sf::Shader::Type::Fragment))
+		throw std::string("Could not load shader in objects loader");
 }
 
 void GamePlayController::UpdateGamePlay()
@@ -202,32 +208,72 @@ void GamePlayController::PollGamePlayEvents()
 		case sf::Event::Closed:
 			this->window->close();
 			break;
+
+		case sf::Event::KeyPressed:
+			if (event.key.code == sf::Keyboard::P)
+				this->isGamePaused = !this->isGamePaused;
 		}
 	}
 }
 
 void GamePlayController::DrawGamePlay()
 {
-	for (auto particle : this->playerOneParticles) {
-		particle.OnDraw(*this->window);
+	if (this->isGamePaused)
+	{
+		for (auto particle : this->playerOneParticles) {
+			particle.OnDraw(*this->window);
+		}
+		for (auto particle : this->playerTwoParticles) {
+			particle.OnDraw(*this->window);
+		}
+
+		this->playerOne->OnDraw(*this->window);
+		this->playerTwo->OnDraw(*this->window);
+
+		for (Block block : this->blocks) {
+			block.OnDraw(*this->window);
+		}
+
+		this->playerOneHealth->OnDraw(*this->window);
+		this->playerOneMana->OnDraw(*this->window);
+
+		this->playerTwoHealth->OnDraw(*this->window);
+		this->playerTwoMana->OnDraw(*this->window);
+
+		this->playerOneSpellBar->OnDraw(*this->window);
+		this->playerTwoSpellBar->OnDraw(*this->window);
 	}
-	for (auto particle : this->playerTwoParticles) {
-		particle.OnDraw(*this->window);
+	else
+	{
+		this->pauseShader.setUniform("pause", true);
+
+		this->gameSceneTexture.clear(sf::Color::White);
+
+		for (auto particle : this->playerOneParticles) {
+			particle.OnDraw(this->gameSceneTexture);
+		}
+		for (auto particle : this->playerTwoParticles) {
+			particle.OnDraw(this->gameSceneTexture);
+		}
+
+		this->playerOne->OnDraw(this->gameSceneTexture);
+		this->playerTwo->OnDraw(this->gameSceneTexture);
+
+		for (Block block : this->blocks) {
+			block.OnDraw(this->gameSceneTexture);
+		}
+
+		this->playerOneHealth->OnDraw(this->gameSceneTexture);
+		this->playerOneMana->OnDraw(this->gameSceneTexture);
+
+		this->playerTwoHealth->OnDraw(this->gameSceneTexture);
+		this->playerTwoMana->OnDraw(this->gameSceneTexture);
+
+		this->playerOneSpellBar->OnDraw(this->gameSceneTexture);
+		this->playerTwoSpellBar->OnDraw(this->gameSceneTexture);
+
+		this->gameSceneTexture.display();
+
+		this->window->draw(gameSceneSprite, &this->pauseShader);
 	}
-
-	this->playerOne->OnDraw(*this->window);
-	this->playerTwo->OnDraw(*this->window);
-	
-	for (Block block : this->blocks) {
-		block.OnDraw(*this->window);
-	}
-
-	this->playerOneHealth->OnDraw(*this->window);
-	this->playerOneMana->OnDraw(*this->window);
-
-	this->playerTwoHealth->OnDraw(*this->window);
-	this->playerTwoMana->OnDraw(*this->window);
-
-	this->playerOneSpellBar->OnDraw(*this->window);
-	this->playerTwoSpellBar->OnDraw(*this->window);
 }

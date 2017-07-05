@@ -70,7 +70,7 @@ void Wizard::RotateRight(double angle)
 
 
 
-void Wizard::OnDraw(sf::RenderWindow & window)
+void Wizard::OnDraw(sf::RenderTarget & window)
 {
 
 	window.draw(this->wizardSprite);

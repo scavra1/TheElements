@@ -31,7 +31,7 @@ public:
 
 	void OnUpdate();
 
-	void OnDraw(sf::RenderWindow & window);
+	void OnDraw(sf::RenderTarget & window);
 
 	void TakeDamage(int damage);
 
