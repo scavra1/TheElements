@@ -75,13 +75,23 @@ void GamePlayController::UpdateGamePlay()
 		for (int j = 0; j < this->blocks.size(); j++) {
 			if (this->blocks[j].containsPoint(this->playerOneParticles[i].getX(), this->playerOneParticles[i].getY()))
 			{
-				this->playerOneParticles[i].kill();
-				break;
+				bool vertical = this->blocks[j].isIntersectingVerticalWall(
+					this->playerOneParticles[i].getX(),
+					this->playerOneParticles[i].getY(),
+					this->playerOneParticles[i].getLastX(),
+					this->playerOneParticles[i].getLastY()
+				);
+				if(vertical) {
+					this->playerOneParticles[i].setSpeed(-this->playerOneParticles[i].getVx(), this->playerOneParticles[i].getVy());
+				}
+				else {
+					this->playerOneParticles[i].setSpeed(this->playerOneParticles[i].getVx(), -this->playerOneParticles[i].getVy());
+				}
 			}
 		}
 		if (this->playerTwo->checkCollision(this->playerOneParticles[i].getX(), this->playerOneParticles[i].getY())) {
 			this->playerOneParticles[i].kill();
-			this->playerTwo->TakeDamage(5.0);
+			this->playerTwo->TakeDamage(2.0);
 			this->playerTwoHealth->SubtractResource(2.0);
 		}
 	}
@@ -90,13 +100,23 @@ void GamePlayController::UpdateGamePlay()
 		for (int j = 0; j < this->blocks.size(); j++) {
 			if (this->blocks[j].containsPoint(this->playerTwoParticles[i].getX(), this->playerTwoParticles[i].getY()))
 			{
-				this->playerTwoParticles[i].kill();
-				break;
+				bool vertical = this->blocks[j].isIntersectingVerticalWall(
+					this->playerTwoParticles[i].getX(),
+					this->playerTwoParticles[i].getY(),
+					this->playerTwoParticles[i].getLastX(),
+					this->playerTwoParticles[i].getLastY()
+				);
+				if (vertical) {
+					this->playerTwoParticles[i].setSpeed(-this->playerTwoParticles[i].getVx(), this->playerTwoParticles[i].getVy());
+				}
+				else {
+					this->playerTwoParticles[i].setSpeed(this->playerTwoParticles[i].getVx(), -this->playerTwoParticles[i].getVy());
+				}
 			}
 		}
 		if (this->playerOne->checkCollision(this->playerTwoParticles[i].getX(), this->playerTwoParticles[i].getY())) {
 			this->playerTwoParticles[i].kill();
-			this->playerOne->TakeDamage(5.0);
+			this->playerOne->TakeDamage(2.0);
 			this->playerOneHealth->SubtractResource(2.0);
 		}
 	}
@@ -107,10 +127,19 @@ void GamePlayController::UpdateGamePlay()
 			double y1 = this->playerOneParticles[i].getY();
 			double x2 = this->playerTwoParticles[j].getX();
 			double y2 = this->playerTwoParticles[j].getY();
-			double distance = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
-			if (distance < 15) {
-				this->playerOneParticles[i].kill();
-				this->playerTwoParticles[j].kill();
+			double distance = hypot(x1 - x2, y1 - y2);
+			const double maxDistance = 22.0;
+			if (distance < maxDistance) {
+				double vx1 = this->playerOneParticles[i].getVx();
+				double vy1 = this->playerOneParticles[i].getVy();
+				double vx2 = this->playerTwoParticles[j].getVx();
+				double vy2 = this->playerTwoParticles[j].getVy();
+
+				double k2 = distance / maxDistance;
+				double k1 = 1.0 - k2;
+
+				this->playerOneParticles[i].setSpeed(vx1 * k2 + vx2 * k1, vy1 * k2 + vy2 * k1);
+				this->playerTwoParticles[j].setSpeed(vx1 * k1 + vx2 * k2, vy1 * k1 + vy2 * k2);
 			}
 		}
 	}
