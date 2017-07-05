@@ -95,6 +95,20 @@ void GamePlayController::UpdateGamePlay()
 		}
 	}
 
+	for (int i = 0; i < this->playerOneParticles.size(); i++) {
+		for (int j = 0; j < this->playerTwoParticles.size(); j++) {
+			double x1 = this->playerOneParticles[i].getX();
+			double y1 = this->playerOneParticles[i].getY();
+			double x2 = this->playerTwoParticles[j].getX();
+			double y2 = this->playerTwoParticles[j].getY();
+			double distance = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+			if (distance < 15) {
+				this->playerOneParticles[i].kill();
+				this->playerTwoParticles[j].kill();
+			}
+		}
+	}
+
 	const double straightSpeed = 4.0;
 	const double sidewaysSpeed = 3.0;
 	const double rotateSpeed = 0.03;
