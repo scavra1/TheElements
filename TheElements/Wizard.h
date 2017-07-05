@@ -4,6 +4,7 @@
 #include "Block.h"
 #include <utility>
 #include <vector>
+#include "Particle.h"
 class Wizard
 {
 
@@ -36,11 +37,15 @@ public:
 
 	bool checkCollision(Block block);
 
+	bool checkCollision(double pointX, double pointY);
+
 	std::vector<std::pair<double, double>> calculateCorners();
 
 	int getHealth();
 
 	int getMana();
+
+	Particle generateParticle();
 
 private:
 	double xPosition;

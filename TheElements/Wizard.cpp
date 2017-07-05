@@ -95,6 +95,15 @@ bool Wizard::checkCollision(Block block)
 	return false;
 }
 
+bool Wizard::checkCollision(double pointX, double pointY)
+{
+	std::vector<std::pair<double, double>> corners = this->calculateCorners();
+	return	pointX > std::min(corners[0].first, corners[2].first) &&
+		pointX < std::max(corners[0].first, corners[2].first) &&
+		pointY > std::min(corners[0].second, corners[2].second) &&
+		pointY < std::max(corners[0].second, corners[2].second);
+}
+
 std::vector<std::pair<double, double>> Wizard::calculateCorners()
 {
 	double width = 30;
@@ -125,6 +134,14 @@ int Wizard::getHealth()
 int Wizard::getMana()
 {
 	return this->mana;
+}
+
+Particle Wizard::generateParticle()
+{
+	double particleSpeed = 10.0;
+	double divergence = 5; //degrees
+	double angle = this->rotation - M_PI / 2 + ((double)(rand() % 200 - 100) / 100.0) * (divergence * M_PI / 180.0);
+	return Particle(this->xPosition, this->yPosition, particleSpeed * cos(angle), particleSpeed * sin(angle));
 }
 
 void Wizard::OnUpdate()

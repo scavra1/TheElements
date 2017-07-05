@@ -5,6 +5,7 @@
 #include "Block.h"
 #include <vector>
 #include "SpellBar.h"
+#include "Particle.h"
 
 class GamePlayController
 {
@@ -40,5 +41,9 @@ private:
 	SpellBar* playerOneSpellBar;
 
 	SpellBar* playerTwoSpellBar;
+
+	std::vector<Particle> playerOneParticles;
+
+	std::vector<Particle> playerTwoParticles;
 
 };

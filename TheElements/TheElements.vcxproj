@@ -134,6 +134,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="ManaBar.cpp" />
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PlayerConfig.cpp" />
     <ClCompile Include="ResourceBar.cpp" />
     <ClCompile Include="MainMenuController.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MainMenuStates.h" />
     <ClInclude Include="ManaBar.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="ResourceBar.h" />
     <ClInclude Include="MainMenuController.h" />
     <ClInclude Include="SpellBar.h" />

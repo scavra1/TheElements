@@ -10,6 +10,8 @@
 
 int main(int argc, char ** argv)
 {
+	srand(time(NULL));
+
 	const int WindowSizeX = 1280;
 	const int WindowSizeY = 720;
 

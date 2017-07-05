@@ -51,6 +51,50 @@ void GamePlayController::UpdateGamePlay()
 	this->playerOne->OnUpdate();
 	this->playerTwo->OnUpdate();
 
+	for (int i = 0; i < this->playerOneParticles.size(); i++) {
+		if (!this->playerOneParticles[i].isAlive())
+		{
+			this->playerOneParticles.erase(this->playerOneParticles.begin() + i);
+		}
+	}
+	for (int i = 0; i < this->playerTwoParticles.size(); i++) {
+		if (!this->playerTwoParticles[i].isAlive())
+		{
+			this->playerTwoParticles.erase(this->playerTwoParticles.begin() + i);
+		}
+	}
+	for (int i = 0; i < this->playerOneParticles.size(); i++) {
+		this->playerOneParticles[i].OnUpdate(1.0);
+		
+		for (int j = 0; j < this->blocks.size(); j++) {
+			if (this->blocks[j].containsPoint(this->playerOneParticles[i].getX(), this->playerOneParticles[i].getY()))
+			{
+				this->playerOneParticles[i].kill();
+				break;
+			}
+		}
+		if (this->playerTwo->checkCollision(this->playerOneParticles[i].getX(), this->playerOneParticles[i].getY())) {
+			this->playerOneParticles[i].kill();
+			this->playerTwo->TakeDamage(5.0);
+			this->playerTwoHealth->SubtractResource(2.0);
+		}
+	}
+	for (int i = 0; i < this->playerTwoParticles.size(); i++) {
+		this->playerTwoParticles[i].OnUpdate(1.0);
+		for (int j = 0; j < this->blocks.size(); j++) {
+			if (this->blocks[j].containsPoint(this->playerTwoParticles[i].getX(), this->playerTwoParticles[i].getY()))
+			{
+				this->playerTwoParticles[i].kill();
+				break;
+			}
+		}
+		if (this->playerOne->checkCollision(this->playerTwoParticles[i].getX(), this->playerTwoParticles[i].getY())) {
+			this->playerTwoParticles[i].kill();
+			this->playerOne->TakeDamage(5.0);
+			this->playerOneHealth->SubtractResource(2.0);
+		}
+	}
+
 	const double straightSpeed = 4.0;
 	const double sidewaysSpeed = 3.0;
 	const double rotateSpeed = 0.03;
@@ -77,6 +121,20 @@ void GamePlayController::UpdateGamePlay()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) sidewaysDistance2 += sidewaysSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) rotation2 -= rotateSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) rotation2 += rotateSpeed;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+			for (int i = 0; i < 1; i++)
+			{
+				this->playerOneParticles.push_back(this->playerOne->generateParticle());
+
+			}
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
+			for (int i = 0; i < 1; i++)
+			{
+				this->playerTwoParticles.push_back(this->playerTwo->generateParticle());
+			}
+		}
 	}
 
 	playerOne->MoveForward(straightDistance1);
@@ -136,6 +194,20 @@ void GamePlayController::PollGamePlayEvents()
 
 void GamePlayController::DrawGamePlay()
 {
+	for (auto particle : this->playerOneParticles) {
+		particle.OnDraw(*this->window);
+	}
+	for (auto particle : this->playerTwoParticles) {
+		particle.OnDraw(*this->window);
+	}
+
+	this->playerOne->OnDraw(*this->window);
+	this->playerTwo->OnDraw(*this->window);
+	
+	for (Block block : this->blocks) {
+		block.OnDraw(*this->window);
+	}
+
 	this->playerOneHealth->OnDraw(*this->window);
 	this->playerOneMana->OnDraw(*this->window);
 
@@ -144,11 +216,4 @@ void GamePlayController::DrawGamePlay()
 
 	this->playerOneSpellBar->OnDraw(*this->window);
 	this->playerTwoSpellBar->OnDraw(*this->window);
-
-	this->playerOne->OnDraw(*this->window);
-	this->playerTwo->OnDraw(*this->window);
-	
-	for (Block block : this->blocks) {
-		block.OnDraw(*this->window);
-	}
 }
