@@ -7,6 +7,7 @@ public:
 	~Block();
 	void OnDraw(sf::RenderWindow & window);
 	bool containsPoint(double pointX, double pointY);
+	bool isIntersectingVerticalWall(double p1x, double p1y, double p2x, double p2y);
 private:
 	double x;
 	double y;

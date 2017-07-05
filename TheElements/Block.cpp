@@ -1,4 +1,5 @@
 #include "Block.h"
+#include <math.h>
 
 
 
@@ -29,4 +30,13 @@ bool Block::containsPoint(double pointX, double pointY)
 			pointX < this->x + this->width / 2 &&
 			pointY > this->y - this->height / 2 &&
 			pointY < this->y + this->height / 2;
+}
+
+bool Block::isIntersectingVerticalWall(double p1x, double p1y, double p2x, double p2y)
+{
+	double a = (p2y - p1y) / (p2x - p1x);
+	double y1 = p1y + ((this->x - this->width / 2) - p1x) * a;
+	double y2 = p1y + ((this->x + this->width / 2) - p1x) * a;
+	return	(y1 >= this->y - this->height / 2 && y1 <= this->y + this->height / 2 && y1 > std::min(p1y, p2y) && y1 < std::max(p1y, p2y)) ||
+			(y2 >= this->y - this->height / 2 && y2 <= this->y + this->height / 2 && y2 > std::min(p1y, p2y) && y2 < std::max(p1y, p2y));
 }

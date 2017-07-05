@@ -11,6 +11,8 @@ public:
 	void kill();
 	double getX() { return this->x; };
 	double getY() { return this->y; };
+	double getLastX() { return this->lastX; };
+	double getLastY() { return this->lastY; };
 	double getVx() { return this->vx; };
 	double getVy() { return this->vy; };
 	void setSpeed(double vx, double vy) {
@@ -25,4 +27,6 @@ private:
 	double vy;
 	double age = 0;
 	double lifeTime;
+	double lastX;
+	double lastY;
 };
