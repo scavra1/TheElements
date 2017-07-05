@@ -19,8 +19,8 @@ void Particle::OnUpdate(double dt)
 
 void Particle::OnDraw(sf::RenderWindow & window)
 {
-	int radius = 4;
-	sf::CircleShape shape(radius);
+	int radius = 8;
+	sf::RectangleShape shape(sf::Vector2f(radius, radius));
 	/*
 	if(this->isAlive())
 		shape.setFillColor(sf::Color(0, 255, 0));
@@ -32,6 +32,12 @@ void Particle::OnDraw(sf::RenderWindow & window)
 	shape.setFillColor(sf::Color(255, 255 - color, 255 - color));
 	shape.setPosition(this->x- radius/2, this->y- radius / 2);
 	window.draw(shape);
+}
+
+void Particle::applyForce(double fx, double fy)
+{
+	this->vx += fx;
+	this->vy += fy;
 }
 
 bool Particle::isAlive()

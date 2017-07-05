@@ -101,10 +101,19 @@ void GamePlayController::UpdateGamePlay()
 			double y1 = this->playerOneParticles[i].getY();
 			double x2 = this->playerTwoParticles[j].getX();
 			double y2 = this->playerTwoParticles[j].getY();
-			double distance = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
-			if (distance < 15) {
-				this->playerOneParticles[i].kill();
-				this->playerTwoParticles[j].kill();
+			double distance = hypot(x1 - x2, y1 - y2);
+			const double maxDistance = 22.0;
+			if (distance < maxDistance) {
+				double vx1 = this->playerOneParticles[i].getVx();
+				double vy1 = this->playerOneParticles[i].getVy();
+				double vx2 = this->playerTwoParticles[j].getVx();
+				double vy2 = this->playerTwoParticles[j].getVy();
+
+				double k2 = distance / maxDistance;
+				double k1 = 1.0 - k2;
+
+				this->playerOneParticles[i].setSpeed(vx1 * k2 + vx2 * k1, vy1 * k2 + vy2 * k1);
+				this->playerTwoParticles[j].setSpeed(vx1 * k1 + vx2 * k2, vy1 * k1 + vy2 * k2);
 			}
 		}
 	}
