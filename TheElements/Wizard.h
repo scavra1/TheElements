@@ -35,15 +35,19 @@ public:
 
 	void TakeDamage(int damage);
 
+	bool UseMana(double mana);
+
+	void IncreaseMana(double mana);
+
 	bool checkCollision(Block block);
 
 	bool checkCollision(double pointX, double pointY);
 
 	std::vector<std::pair<double, double>> calculateCorners();
 
-	int getHealth();
+	double getHealth();
 
-	int getMana();
+	double getMana();
 
 	Particle generateParticle();
 
@@ -54,9 +58,11 @@ private:
 
 	double rotation;
 
-	int health;
+	double health;
 
-	int mana;
+	double mana;
+
+	double maxMana;
 
 	sf::Sprite wizardSprite;
 

@@ -6,7 +6,7 @@
 Wizard::Wizard(int maxHealth, int maxMana)
 {
 	this->health = maxHealth;
-	this->mana = maxMana;
+	this->mana = this->maxMana = maxMana;
 
 	if (!this->texture.loadFromFile("textures/wizard.png"))
 		throw "Could not load texture in wizard loader.";
@@ -81,6 +81,18 @@ void Wizard::TakeDamage(int damage)
 	health -= damage;
 }
 
+bool Wizard::UseMana(double mana)
+{
+	if (this->mana < mana)
+		return false;
+	this->mana -= mana;
+	return true;
+}
+
+void Wizard::IncreaseMana(double mana) {
+	this->mana = std::min(this->mana + mana, this->maxMana);
+}
+
 bool Wizard::checkCollision(Block block)
 {
 	std::vector<std::pair<double, double>> corners = this->calculateCorners();
@@ -126,12 +138,12 @@ std::vector<std::pair<double, double>> Wizard::calculateCorners()
 	return corners;
 }
 
-int Wizard::getHealth()
+double Wizard::getHealth()
 {
 	return this->health;
 }
 
-int Wizard::getMana()
+double Wizard::getMana()
 {
 	return this->mana;
 }

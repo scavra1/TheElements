@@ -42,6 +42,12 @@ GamePlayController::GamePlayController(sf::RenderWindow * window)
 
 void GamePlayController::UpdateGamePlay()
 {
+	//Regenerate mana
+	this->playerOne->IncreaseMana(1);
+	this->playerTwo->IncreaseMana(1);
+	this->playerOneMana->AddResource(1);
+	this->playerTwoMana->AddResource(1);
+
 	this->playerOneHealth->OnUpdate();
 	this->playerOneMana->OnUpdate();
 
@@ -168,14 +174,21 @@ void GamePlayController::UpdateGamePlay()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
 			for (int i = 0; i < 1; i++)
 			{
-				this->playerOneParticles.push_back(this->playerOne->generateParticle());
+				if (this->playerOne->UseMana(3.0)) {
+					this->playerOneParticles.push_back(this->playerOne->generateParticle());
+					this->playerOneMana->SubtractResource(3.0);
+				}
 
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
 			for (int i = 0; i < 1; i++)
 			{
-				this->playerTwoParticles.push_back(this->playerTwo->generateParticle());
+				
+				if (this->playerTwo->UseMana(3.0)) {
+					this->playerTwoParticles.push_back(this->playerTwo->generateParticle());
+					this->playerTwoMana->SubtractResource(3.0);
+				}
 			}
 		}
 	}
