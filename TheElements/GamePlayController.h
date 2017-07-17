@@ -46,4 +46,10 @@ private:
 
 	std::vector<Particle> playerTwoParticles;
 
+	void handleSteering();
+
+	void handlePlayersCollisions(double straightDistance1, double sidewaysDistance1, double rotation1, double straightDistance2, double sidewaysDistance2, double rotation2);
+
+	void handleParticles();
+
 };
