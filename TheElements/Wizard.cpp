@@ -8,10 +8,10 @@ Wizard::Wizard(int maxHealth, int maxMana)
 	this->health = maxHealth;
 	this->mana = this->maxMana = maxMana;
 
-	if (!this->texture.loadFromFile("textures/wizard.png"))
+	if (!this->texture.loadFromFile("textures/wizard-still.png"))
 		throw "Could not load texture in wizard loader.";
 
-	this->wizardSprite.setOrigin(sf::Vector2f(15, 24));
+	this->wizardSprite.setOrigin(sf::Vector2f(21.5, 30));
 	this->wizardSprite.setTexture(this->texture);
 	this->rotation = M_PI / 2.0;
 
@@ -118,13 +118,14 @@ bool Wizard::checkCollision(double pointX, double pointY)
 
 std::vector<std::pair<double, double>> Wizard::calculateCorners()
 {
-	double width = 30;
-	double height = 48;
+	double width = 43;
+	double heightTop = 15;
+	double heightBottom = 28;
 	std::vector<std::pair<double, double>> corners;
-	corners.push_back(std::pair<double, double>(this->xPosition - width / 2, this->yPosition - height / 2));
-	corners.push_back(std::pair<double, double>(this->xPosition + width / 2, this->yPosition - height / 2));
-	corners.push_back(std::pair<double, double>(this->xPosition + width / 2, this->yPosition + height / 2));
-	corners.push_back(std::pair<double, double>(this->xPosition - width / 2, this->yPosition + height / 2));
+	corners.push_back(std::pair<double, double>(this->xPosition - width / 2, this->yPosition - heightTop));
+	corners.push_back(std::pair<double, double>(this->xPosition + width / 2, this->yPosition - heightTop));
+	corners.push_back(std::pair<double, double>(this->xPosition + width / 2, this->yPosition + heightBottom));
+	corners.push_back(std::pair<double, double>(this->xPosition - width / 2, this->yPosition + heightBottom));
 
 	//Rotation
 	double s = sin(this->rotation);
@@ -150,10 +151,14 @@ double Wizard::getMana()
 
 Particle Wizard::generateParticle()
 {
+	double leftDistance = 12.0;
+	double frontDistance = 35.0;
+	double dx = leftDistance * cos(this->rotation) - frontDistance * cos(this->rotation + M_PI / 2);
+	double dy = leftDistance * sin(this->rotation) - frontDistance * sin(this->rotation + M_PI / 2);
 	double particleSpeed = 10.0;
 	double divergence = 5; //degrees
 	double angle = this->rotation - M_PI / 2 + ((double)(rand() % 200 - 100) / 100.0) * (divergence * M_PI / 180.0);
-	return Particle(this->xPosition, this->yPosition, particleSpeed * cos(angle), particleSpeed * sin(angle));
+	return Particle(this->xPosition + dx, this->yPosition + dy, particleSpeed * cos(angle), particleSpeed * sin(angle));
 }
 
 void Wizard::OnUpdate()
