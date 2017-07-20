@@ -63,12 +63,13 @@ void GamePlayController::UpdateGamePlay()
 	//Shooting
 	if (this->window->hasFocus())
 	{
+		double manaNeeded = 3.0;	//3.0
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
 			for (int i = 0; i < 1; i++)
 			{
-				if (this->playerOne->UseMana(3.0)) {
+				if (this->playerOne->UseMana(manaNeeded)) {
 					this->playerOneParticles.push_back(this->playerOne->generateParticle());
-					this->playerOneMana->SubtractResource(3.0);
+					this->playerOneMana->SubtractResource(manaNeeded);
 				}
 
 			}
@@ -77,9 +78,9 @@ void GamePlayController::UpdateGamePlay()
 			for (int i = 0; i < 1; i++)
 			{
 				
-				if (this->playerTwo->UseMana(3.0)) {
+				if (this->playerTwo->UseMana(manaNeeded)) {
 					this->playerTwoParticles.push_back(this->playerTwo->generateParticle());
-					this->playerTwoMana->SubtractResource(3.0);
+					this->playerTwoMana->SubtractResource(manaNeeded);
 				}
 			}
 		}
@@ -132,7 +133,7 @@ void GamePlayController::handleSteering()
 {
 	const double straightSpeed = 4.0;
 	const double sidewaysSpeed = 3.0;
-	const double rotateSpeed = 0.03;
+	const double rotateSpeed = 0.04;
 
 	double straightDistance1 = 0.0;
 	double sidewaysDistance1 = 0.0;
@@ -145,17 +146,17 @@ void GamePlayController::handleSteering()
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) straightDistance1 += straightSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) straightDistance1 -= straightSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) sidewaysDistance1 -= sidewaysSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) sidewaysDistance1 += sidewaysSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) rotation1 -= rotateSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) rotation1 += rotateSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) rotation1 -= rotateSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) rotation1 += rotateSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) sidewaysDistance1 -= sidewaysSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) sidewaysDistance1 += sidewaysSpeed;
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) straightDistance2 += straightSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) straightDistance2 -= straightSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) sidewaysDistance2 -= sidewaysSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) sidewaysDistance2 += sidewaysSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) rotation2 -= rotateSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) rotation2 += rotateSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) rotation2 -= rotateSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) rotation2 += rotateSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) sidewaysDistance2 -= sidewaysSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) sidewaysDistance2 += sidewaysSpeed;
 	}
 
 	playerOne->MoveForward(straightDistance1);
@@ -267,14 +268,14 @@ void GamePlayController::handleParticles()
 		}
 	}
 
+	const double maxDistance = 22.0;
 	for (int i = 0; i < this->playerOneParticles.size(); i++) {
+		double x1 = this->playerOneParticles[i].getX();
+		double y1 = this->playerOneParticles[i].getY();
 		for (int j = 0; j < this->playerTwoParticles.size(); j++) {
-			double x1 = this->playerOneParticles[i].getX();
-			double y1 = this->playerOneParticles[i].getY();
 			double x2 = this->playerTwoParticles[j].getX();
 			double y2 = this->playerTwoParticles[j].getY();
 			double distance = hypot(x1 - x2, y1 - y2);
-			const double maxDistance = 22.0;
 			if (distance < maxDistance) {
 				double vx1 = this->playerOneParticles[i].getVx();
 				double vy1 = this->playerOneParticles[i].getVy();
