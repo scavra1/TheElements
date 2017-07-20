@@ -64,7 +64,13 @@ private:
 
 	double maxMana;
 
+	double isMoving = false;
+
+	int walkAnimationTimer = 0;
+
 	sf::Sprite wizardSprite;
 
-	sf::Texture texture;
+	sf::Texture stilTexture;
+
+	sf::Texture walkTextures[2];
 };

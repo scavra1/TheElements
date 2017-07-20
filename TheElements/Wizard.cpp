@@ -8,13 +8,16 @@ Wizard::Wizard(int maxHealth, int maxMana)
 	this->health = maxHealth;
 	this->mana = this->maxMana = maxMana;
 
-	if (!this->texture.loadFromFile("textures/wizard-still.png"))
+	if (!this->stilTexture.loadFromFile("textures/wizard-still.png"))
+		throw "Could not load texture in wizard loader.";
+	if (!this->walkTextures[0].loadFromFile("textures/wizard-run1.png"))
+		throw "Could not load texture in wizard loader.";
+	if (!this->walkTextures[1].loadFromFile("textures/wizard-run2.png"))
 		throw "Could not load texture in wizard loader.";
 
 	this->wizardSprite.setOrigin(sf::Vector2f(21.5, 30));
-	this->wizardSprite.setTexture(this->texture);
+	this->wizardSprite.setTexture(this->stilTexture);
 	this->rotation = M_PI / 2.0;
-
 }
 
 void Wizard::SetPosition(double x, double y, double r)
@@ -40,12 +43,16 @@ void Wizard::MoveBackward(double displacement)
 {
 	this->yPosition -= displacement * cos(this->rotation + M_PI);
 	this->xPosition += displacement * sin(this->rotation + M_PI);
+	if (displacement != 0)
+		this->isMoving = true;
 }
 
 void Wizard::MoveForward(double displacement)
 {
 	this->yPosition -= displacement * cos(this->rotation);
 	this->xPosition += displacement * sin(this->rotation);
+	if (displacement != 0)
+		this->isMoving = true;
 }
 
 void Wizard::StartAttack()
@@ -67,12 +74,17 @@ void Wizard::RotateRight(double angle)
 {
 	this->rotation += angle;
 }
-
-
-
 void Wizard::OnDraw(sf::RenderWindow & window)
 {
-
+	const int flatsPerImage = 8;
+	const int flats = 2;
+	if (this->isMoving) {
+		this->wizardSprite.setTexture(this->walkTextures[this->walkAnimationTimer / flatsPerImage]);
+		this->walkAnimationTimer = (this->walkAnimationTimer + 1) % (flats * flatsPerImage);
+	}
+	else {
+		this->wizardSprite.setTexture(this->stilTexture);
+	}
 	window.draw(this->wizardSprite);
 }
 
@@ -165,4 +177,5 @@ void Wizard::OnUpdate()
 {
 	this->wizardSprite.setRotation(this->rotation * 180 / M_PI);
 	this->wizardSprite.setPosition(this->xPosition, this->yPosition);
+	this->isMoving = false;
 }
