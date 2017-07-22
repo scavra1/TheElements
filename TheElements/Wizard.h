@@ -49,12 +49,24 @@ public:
 
 	double getMana();
 
-	Particle generateParticle();
+	double getX() { return this->xPosition; };
+
+	double getY() { return this->yPosition; };
+
+	double getLastX() { return this->lastXPosition; };
+
+	double getLastY() { return this->lastYPosition; };
+
+	Particle generateParticle(Elements type);
 
 private:
 	double xPosition;
 
 	double yPosition;
+
+	double lastXPosition;
+
+	double lastYPosition;
 
 	double rotation;
 

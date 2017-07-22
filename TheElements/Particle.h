@@ -1,9 +1,11 @@
 #pragma once
 #include <SFML\Graphics.hpp>
+#include "Elements.h"
+
 class Particle
 {
 public:
-	Particle(double x, double y, double vx, double vy);
+	Particle(double x, double y, double vx, double vy, Elements type);
 	void OnUpdate(double dt);
 	void OnDraw(sf::RenderWindow & window);
 	void applyForce(double fx, double fy);
@@ -19,7 +21,16 @@ public:
 		this->vx = vx;
 		this->vy = vy;
 	};
+	void setPosition(double x, double y) {
+		this->x = x;
+		this->y = y;
+	};
+	void move(double dx, double dy) {
+		this->x += dx;
+		this->y += dy;
+	};
 	double getStrength() { return 1.0 - this->age / this->lifeTime; };
+	Elements getType() { return this->type; };
 private:
 	double x;
 	double y;
@@ -29,4 +40,5 @@ private:
 	double lifeTime;
 	double lastX;
 	double lastY;
+	Elements type;
 };

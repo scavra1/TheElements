@@ -161,16 +161,30 @@ double Wizard::getMana()
 	return this->mana;
 }
 
-Particle Wizard::generateParticle()
+Particle Wizard::generateParticle(Elements type)
 {
-	double leftDistance = 12.0;
-	double frontDistance = 35.0;
-	double dx = leftDistance * cos(this->rotation) - frontDistance * cos(this->rotation + M_PI / 2);
-	double dy = leftDistance * sin(this->rotation) - frontDistance * sin(this->rotation + M_PI / 2);
-	double particleSpeed = 10.0;
-	double divergence = 5; //degrees
-	double angle = this->rotation - M_PI / 2 + ((double)(rand() % 200 - 100) / 100.0) * (divergence * M_PI / 180.0);
-	return Particle(this->xPosition + dx, this->yPosition + dy, particleSpeed * cos(angle), particleSpeed * sin(angle));
+	double leftDistance, frontDistance, dx, dy, particleSpeed, divergence, angle;
+	switch (type) {
+	case Elements::Water:
+		leftDistance = 0.0;
+		frontDistance = 45.0;
+		dx = leftDistance * cos(this->rotation) - frontDistance * cos(this->rotation + M_PI / 2);
+		dy = leftDistance * sin(this->rotation) - frontDistance * sin(this->rotation + M_PI / 2);
+		particleSpeed = 10.0;
+		divergence = 5; //degrees
+		angle = this->rotation - M_PI + ((double)(rand() % 200 - 100) / 100.0) * (divergence * M_PI / 180.0);
+		return Particle(this->xPosition + dx, this->yPosition + dy, particleSpeed * cos(angle), particleSpeed * sin(angle), type);
+	default:
+		leftDistance = 12.0;
+		frontDistance = 35.0;
+		dx = leftDistance * cos(this->rotation) - frontDistance * cos(this->rotation + M_PI / 2);
+		dy = leftDistance * sin(this->rotation) - frontDistance * sin(this->rotation + M_PI / 2);
+		particleSpeed = 10.0;
+		divergence = 5; //degrees
+		angle = this->rotation - M_PI / 2 + ((double)(rand() % 200 - 100) / 100.0) * (divergence * M_PI / 180.0);
+		return Particle(this->xPosition + dx, this->yPosition + dy, particleSpeed * cos(angle), particleSpeed * sin(angle), type);
+	}
+	
 }
 
 void Wizard::OnUpdate()
@@ -178,4 +192,6 @@ void Wizard::OnUpdate()
 	this->wizardSprite.setRotation(this->rotation * 180 / M_PI);
 	this->wizardSprite.setPosition(this->xPosition, this->yPosition);
 	this->isMoving = false;
+	this->lastXPosition = this->xPosition;
+	this->lastYPosition = this->yPosition;
 }

@@ -57,8 +57,8 @@ void GamePlayController::UpdateGamePlay()
 	this->playerOne->OnUpdate();
 	this->playerTwo->OnUpdate();
 
-	this->handleParticles();
 	this->handleSteering();
+	this->handleParticles();
 
 	//Shooting
 	if (this->window->hasFocus())
@@ -68,7 +68,7 @@ void GamePlayController::UpdateGamePlay()
 			for (int i = 0; i < 1; i++)
 			{
 				if (this->playerOne->UseMana(manaNeeded)) {
-					this->playerOneParticles.push_back(this->playerOne->generateParticle());
+					this->playerOneParticles.push_back(this->playerOne->generateParticle(Elements::Fire));
 					this->playerOneMana->SubtractResource(manaNeeded);
 				}
 
@@ -78,9 +78,9 @@ void GamePlayController::UpdateGamePlay()
 			for (int i = 0; i < 1; i++)
 			{
 				
-				if (this->playerTwo->UseMana(manaNeeded)) {
-					this->playerTwoParticles.push_back(this->playerTwo->generateParticle());
-					this->playerTwoMana->SubtractResource(manaNeeded);
+				if (this->playerTwo->UseMana(manaNeeded*2)) {
+					this->playerTwoParticles.push_back(this->playerTwo->generateParticle(Elements::Water));
+					this->playerTwoMana->SubtractResource(manaNeeded*2);
 				}
 			}
 		}
@@ -204,6 +204,7 @@ void GamePlayController::handlePlayersCollisions(double straightDistance1, doubl
 
 void GamePlayController::handleParticles()
 {
+	//Removing dead particles
 	for (int i = 0; i < this->playerOneParticles.size(); i++) {
 		if (!this->playerOneParticles[i].isAlive())
 		{
@@ -216,78 +217,138 @@ void GamePlayController::handleParticles()
 			this->playerTwoParticles.erase(this->playerTwoParticles.begin() + i);
 		}
 	}
+
+	//PlayerOneParticles collisions with blocks and players
 	for (int i = 0; i < this->playerOneParticles.size(); i++) {
 		this->playerOneParticles[i].OnUpdate(1.0);
+		if (this->playerOneParticles[i].getType() == Elements::Water) {
+			double playerX = this->playerOne->getX();
+			double playerY = this->playerOne->getY();
+			this->playerOneParticles[i].move(playerX - this->playerOne->getLastX(), playerY - this->playerOne->getLastY());
+			double x = this->playerOneParticles[i].getX();
+			double y = this->playerOneParticles[i].getY();
+			double vx = this->playerOneParticles[i].getVx();
+			double vy = this->playerOneParticles[i].getVy();
+			double dx = playerX - x;
+			double dy = playerY - y;
+			double distance = hypot(dx, dy);
 
-		for (int j = 0; j < this->blocks.size(); j++) {
-			if (this->blocks[j].containsPoint(this->playerOneParticles[i].getX(), this->playerOneParticles[i].getY()))
-			{
-				bool vertical = this->blocks[j].isIntersectingVerticalWall(
-					this->playerOneParticles[i].getX(),
-					this->playerOneParticles[i].getY(),
-					this->playerOneParticles[i].getLastX(),
-					this->playerOneParticles[i].getLastY()
-				);
-				if (vertical) {
-					this->playerOneParticles[i].setSpeed(-this->playerOneParticles[i].getVx(), this->playerOneParticles[i].getVy());
-				}
-				else {
-					this->playerOneParticles[i].setSpeed(this->playerOneParticles[i].getVx(), -this->playerOneParticles[i].getVy());
-				}
+			if (distance < 100) {
+				double force = 5e3 / distance / distance;
+				double dvx = force * dx / distance;
+				double dvy = force * dy / distance;
+				this->playerOneParticles[i].setSpeed(vx + dvx, vy + dvy);
 			}
 		}
-		if (this->playerTwo->checkCollision(this->playerOneParticles[i].getX(), this->playerOneParticles[i].getY())) {
-			this->playerOneParticles[i].kill();
-			this->playerTwo->TakeDamage(2.0);
-			this->playerTwoHealth->SubtractResource(2.0);
+		else {
+			for (int j = 0; j < this->blocks.size(); j++) {
+				if (this->blocks[j].containsPoint(this->playerOneParticles[i].getX(), this->playerOneParticles[i].getY()))
+				{
+					bool vertical = this->blocks[j].isIntersectingVerticalWall(
+						this->playerOneParticles[i].getX(),
+						this->playerOneParticles[i].getY(),
+						this->playerOneParticles[i].getLastX(),
+						this->playerOneParticles[i].getLastY()
+					);
+					if (vertical) {
+						this->playerOneParticles[i].setSpeed(-this->playerOneParticles[i].getVx(), this->playerOneParticles[i].getVy());
+					}
+					else {
+						this->playerOneParticles[i].setSpeed(this->playerOneParticles[i].getVx(), -this->playerOneParticles[i].getVy());
+					}
+				}
+			}
+			if (this->playerTwo->checkCollision(this->playerOneParticles[i].getX(), this->playerOneParticles[i].getY())) {
+				this->playerOneParticles[i].kill();
+				this->playerTwo->TakeDamage(2.0);
+				this->playerTwoHealth->SubtractResource(2.0);
+			}
 		}
 	}
+
+	//PlayerTwoParticles collisions with blocks and players
 	for (int i = 0; i < this->playerTwoParticles.size(); i++) {
 		this->playerTwoParticles[i].OnUpdate(1.0);
-		for (int j = 0; j < this->blocks.size(); j++) {
-			if (this->blocks[j].containsPoint(this->playerTwoParticles[i].getX(), this->playerTwoParticles[i].getY()))
-			{
-				bool vertical = this->blocks[j].isIntersectingVerticalWall(
-					this->playerTwoParticles[i].getX(),
-					this->playerTwoParticles[i].getY(),
-					this->playerTwoParticles[i].getLastX(),
-					this->playerTwoParticles[i].getLastY()
-				);
-				if (vertical) {
-					this->playerTwoParticles[i].setSpeed(-this->playerTwoParticles[i].getVx(), this->playerTwoParticles[i].getVy());
-				}
-				else {
-					this->playerTwoParticles[i].setSpeed(this->playerTwoParticles[i].getVx(), -this->playerTwoParticles[i].getVy());
-				}
+		if (this->playerTwoParticles[i].getType() == Elements::Water) {
+			double playerX = this->playerTwo->getX();
+			double playerY = this->playerTwo->getY();
+			this->playerTwoParticles[i].move(playerX - this->playerTwo->getLastX(), playerY - this->playerTwo->getLastY());
+			double x = this->playerTwoParticles[i].getX();
+			double y = this->playerTwoParticles[i].getY();
+			double vx = this->playerTwoParticles[i].getVx();
+			double vy = this->playerTwoParticles[i].getVy();
+			double dx = playerX - x;
+			double dy = playerY - y;
+			double distance = hypot(dx, dy);
+			
+			if (distance < 100) {
+				double force = 5e3 / distance / distance;
+				double dvx = force * dx / distance;
+				double dvy = force * dy / distance;
+				this->playerTwoParticles[i].setSpeed(vx + dvx, vy + dvy);
 			}
 		}
-		if (this->playerOne->checkCollision(this->playerTwoParticles[i].getX(), this->playerTwoParticles[i].getY())) {
-			this->playerTwoParticles[i].kill();
-			this->playerOne->TakeDamage(2.0);
-			this->playerOneHealth->SubtractResource(2.0);
+		else {
+			for (int j = 0; j < this->blocks.size(); j++) {
+				if (this->blocks[j].containsPoint(this->playerTwoParticles[i].getX(), this->playerTwoParticles[i].getY()))
+				{
+					bool vertical = this->blocks[j].isIntersectingVerticalWall(
+						this->playerTwoParticles[i].getX(),
+						this->playerTwoParticles[i].getY(),
+						this->playerTwoParticles[i].getLastX(),
+						this->playerTwoParticles[i].getLastY()
+					);
+					if (vertical) {
+						this->playerTwoParticles[i].setSpeed(-this->playerTwoParticles[i].getVx(), this->playerTwoParticles[i].getVy());
+					}
+					else {
+						this->playerTwoParticles[i].setSpeed(this->playerTwoParticles[i].getVx(), -this->playerTwoParticles[i].getVy());
+					}
+				}
+			}
+			if (this->playerOne->checkCollision(this->playerTwoParticles[i].getX(), this->playerTwoParticles[i].getY())) {
+				this->playerTwoParticles[i].kill();
+				this->playerOne->TakeDamage(2.0);
+				this->playerOneHealth->SubtractResource(2.0);
+			}
 		}
 	}
 
+	//particle - particle collisions
 	const double maxDistance = 22.0;
 	for (int i = 0; i < this->playerOneParticles.size(); i++) {
 		double x1 = this->playerOneParticles[i].getX();
 		double y1 = this->playerOneParticles[i].getY();
+		bool killedParticlesFlag = false;
 		for (int j = 0; j < this->playerTwoParticles.size(); j++) {
-			double x2 = this->playerTwoParticles[j].getX();
-			double y2 = this->playerTwoParticles[j].getY();
-			double distance = hypot(x1 - x2, y1 - y2);
-			if (distance < maxDistance) {
-				double vx1 = this->playerOneParticles[i].getVx();
-				double vy1 = this->playerOneParticles[i].getVy();
-				double vx2 = this->playerTwoParticles[j].getVx();
-				double vy2 = this->playerTwoParticles[j].getVy();
+			if (!(this->playerOneParticles[i].getType() == this->playerTwoParticles[j].getType() == Elements::Water)) {
+				double x2 = this->playerTwoParticles[j].getX();
+				double y2 = this->playerTwoParticles[j].getY();
+				double distance = hypot(x1 - x2, y1 - y2);
+				if (distance < maxDistance) {
+					if (this->playerOneParticles[i].getType() != this->playerTwoParticles[j].getType()) {
+						this->playerOneParticles[i].kill();
+						this->playerTwoParticles[j].kill();
+						killedParticlesFlag = true;
+						break;
+					}
+					else {
+						double vx1 = this->playerOneParticles[i].getVx();
+						double vy1 = this->playerOneParticles[i].getVy();
+						double vx2 = this->playerTwoParticles[j].getVx();
+						double vy2 = this->playerTwoParticles[j].getVy();
 
-				double k2 = distance / maxDistance;
-				double k1 = 1.0 - k2;
+						double k2 = distance / maxDistance;
+						double k1 = 1.0 - k2;
 
-				this->playerOneParticles[i].setSpeed(vx1 * k2 + vx2 * k1, vy1 * k2 + vy2 * k1);
-				this->playerTwoParticles[j].setSpeed(vx1 * k1 + vx2 * k2, vy1 * k1 + vy2 * k2);
+						this->playerOneParticles[i].setSpeed(vx1 * k2 + vx2 * k1, vy1 * k2 + vy2 * k1);
+						this->playerTwoParticles[j].setSpeed(vx1 * k1 + vx2 * k2, vy1 * k1 + vy2 * k2);
+					}
+				}
 			}
+		}
+		if (killedParticlesFlag) {
+			break;
 		}
 	}
 }
