@@ -38,55 +38,64 @@ GamePlayController::GamePlayController(sf::RenderWindow * window)
 	this->blocks.push_back(Block(600, 500, 200, 100));
 
 	this->window = window;
+
+	this->gameSceneTexture.create(1280, 720, false);
+	this->gameSceneSprite.setTexture(gameSceneTexture.getTexture());
+
+	if (!this->pauseShader.loadFromFile("shaders/wb.frag", sf::Shader::Type::Fragment))
+		throw std::string("Could not load shader in objects loader");
 }
 
 void GamePlayController::UpdateGamePlay()
 {
-	//Regenerate mana
-	this->playerOne->IncreaseMana(1);
-	this->playerTwo->IncreaseMana(1);
-	this->playerOneMana->AddResource(1);
-	this->playerTwoMana->AddResource(1);
-
-	this->playerOneHealth->OnUpdate();
-	this->playerOneMana->OnUpdate();
-
-	this->playerTwoHealth->OnUpdate();
-	this->playerTwoMana->OnUpdate();
-
-	this->playerOne->OnUpdate();
-	this->playerTwo->OnUpdate();
-
-	this->handleSteering();
-	this->handleParticles();
-
-	//Shooting
-	if (this->window->hasFocus())
+	if (!this->isGamePaused)
 	{
-		double manaNeeded = 3.0;	//3.0
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
-			for (int i = 0; i < 1; i++)
-			{
-				if (this->playerOne->UseMana(manaNeeded)) {
-					this->playerOneParticles.push_back(this->playerOne->generateParticle(Elements::Fire));
-					this->playerOneMana->SubtractResource(manaNeeded);
-				}
+		//Regenerate mana
+		this->playerOne->IncreaseMana(1);
+		this->playerTwo->IncreaseMana(1);
+		this->playerOneMana->AddResource(1);
+		this->playerTwoMana->AddResource(1);
 
+		this->playerOneHealth->OnUpdate();
+		this->playerOneMana->OnUpdate();
+
+		this->playerTwoHealth->OnUpdate();
+		this->playerTwoMana->OnUpdate();
+
+		this->playerOne->OnUpdate();
+		this->playerTwo->OnUpdate();
+
+		this->handleSteering();
+		this->handleParticles();
+
+		//Shooting
+		if (this->window->hasFocus())
+		{
+			double manaNeeded = 3.0;	//3.0
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+				for (int i = 0; i < 1; i++)
+				{
+					if (this->playerOne->UseMana(manaNeeded)) {
+						this->playerOneParticles.push_back(this->playerOne->generateParticle(Elements::Fire));
+						this->playerOneMana->SubtractResource(manaNeeded);
+					}
+
+				}
 			}
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
-			for (int i = 0; i < 1; i++)
-			{
-				
-				if (this->playerTwo->UseMana(manaNeeded*2)) {
-					this->playerTwoParticles.push_back(this->playerTwo->generateParticle(Elements::Water));
-					this->playerTwoMana->SubtractResource(manaNeeded*2);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
+				for (int i = 0; i < 1; i++)
+				{
+
+					if (this->playerTwo->UseMana(manaNeeded * 2)) {
+						this->playerTwoParticles.push_back(this->playerTwo->generateParticle(Elements::Water));
+						this->playerTwoMana->SubtractResource(manaNeeded * 2);
+					}
 				}
 			}
 		}
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) this->playerOneSpellBar->UseSpell(Elements::Fire);
 	}
-
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) this->playerOneSpellBar->UseSpell(Elements::Fire);
 }
 
 void GamePlayController::PollGamePlayEvents()
@@ -99,10 +108,14 @@ void GamePlayController::PollGamePlayEvents()
 		case sf::Event::Closed:
 			this->window->close();
 			break;
+		case sf::Event::KeyPressed:
+			if (event.key.code == sf::Keyboard::P)
+				this->isGamePaused = !this->isGamePaused;
+			break;
 		}
 	}
 }
-
+/*
 void GamePlayController::DrawGamePlay()
 {
 	for (auto particle : this->playerOneParticles) {
@@ -128,6 +141,7 @@ void GamePlayController::DrawGamePlay()
 	this->playerOneSpellBar->OnDraw(*this->window);
 	this->playerTwoSpellBar->OnDraw(*this->window);
 }
+*/
 
 void GamePlayController::handleSteering()
 {
@@ -179,23 +193,26 @@ void GamePlayController::handlePlayersCollisions(double straightDistance1, doubl
 			if (playerOne->checkCollision(block)) {
 				playerOne->RotateRight(-bounceRotation * 2);
 				if (playerOne->checkCollision(block)) {
-					playerOne->RotateRight(bounceRotation);
-					playerOne->MoveForward(-straightDistance1);
-					playerOne->MoveRight(-sidewaysDistance1);
-					playerOne->RotateRight(-rotation1);
+					playerOne->RotateRight(-bounceRotation * 2);
+					if (playerOne->checkCollision(block)) {
+						playerOne->RotateRight(bounceRotation);
+						playerOne->MoveForward(-straightDistance1);
+						playerOne->MoveRight(-sidewaysDistance1);
+						playerOne->RotateRight(-rotation1);
+					}
 				}
 			}
-		}
-		if (playerTwo->checkCollision(block))
-		{
-			playerTwo->RotateRight(bounceRotation);
-			if (playerTwo->checkCollision(block)) {
-				playerTwo->RotateRight(-bounceRotation * 2);
+			if (playerTwo->checkCollision(block))
+			{
+				playerTwo->RotateRight(bounceRotation);
 				if (playerTwo->checkCollision(block)) {
-					playerTwo->RotateRight(bounceRotation);
-					playerTwo->MoveForward(-straightDistance2);
-					playerTwo->MoveRight(-sidewaysDistance2);
-					playerTwo->RotateRight(-rotation2);
+					playerTwo->RotateRight(-bounceRotation * 2);
+					if (playerTwo->checkCollision(block)) {
+						playerTwo->RotateRight(bounceRotation);
+						playerTwo->MoveForward(-straightDistance2);
+						playerTwo->MoveRight(-sidewaysDistance2);
+						playerTwo->RotateRight(-rotation2);
+					}
 				}
 			}
 		}
@@ -280,7 +297,7 @@ void GamePlayController::handleParticles()
 			double dx = playerX - x;
 			double dy = playerY - y;
 			double distance = hypot(dx, dy);
-			
+
 			if (distance < 100) {
 				double force = 5e3 / distance / distance;
 				double dvx = force * dx / distance;
@@ -350,5 +367,67 @@ void GamePlayController::handleParticles()
 		if (killedParticlesFlag) {
 			break;
 		}
+	}
+}
+
+void GamePlayController::DrawGamePlay()
+{
+	if (!this->isGamePaused)
+	{
+		for (auto particle : this->playerOneParticles) {
+			particle.OnDraw(*this->window);
+		}
+		for (auto particle : this->playerTwoParticles) {
+			particle.OnDraw(*this->window);
+		}
+
+		this->playerOne->OnDraw(*this->window);
+		this->playerTwo->OnDraw(*this->window);
+
+		for (Block block : this->blocks) {
+			block.OnDraw(*this->window);
+		}
+
+		this->playerOneHealth->OnDraw(*this->window);
+		this->playerOneMana->OnDraw(*this->window);
+
+		this->playerTwoHealth->OnDraw(*this->window);
+		this->playerTwoMana->OnDraw(*this->window);
+
+		this->playerOneSpellBar->OnDraw(*this->window);
+		this->playerTwoSpellBar->OnDraw(*this->window);
+	}
+	else
+	{
+		this->pauseShader.setUniform("pause", true);
+
+		this->gameSceneTexture.clear(sf::Color::White);
+
+		for (auto particle : this->playerOneParticles) {
+			particle.OnDraw(this->gameSceneTexture);
+		}
+		for (auto particle : this->playerTwoParticles) {
+			particle.OnDraw(this->gameSceneTexture);
+		}
+
+		this->playerOne->OnDraw(this->gameSceneTexture);
+		this->playerTwo->OnDraw(this->gameSceneTexture);
+
+		for (Block block : this->blocks) {
+			block.OnDraw(this->gameSceneTexture);
+		}
+
+		this->playerOneHealth->OnDraw(this->gameSceneTexture);
+		this->playerOneMana->OnDraw(this->gameSceneTexture);
+
+		this->playerTwoHealth->OnDraw(this->gameSceneTexture);
+		this->playerTwoMana->OnDraw(this->gameSceneTexture);
+
+		this->playerOneSpellBar->OnDraw(this->gameSceneTexture);
+		this->playerTwoSpellBar->OnDraw(this->gameSceneTexture);
+
+		this->gameSceneTexture.display();
+
+		this->window->draw(gameSceneSprite, &this->pauseShader);
 	}
 }

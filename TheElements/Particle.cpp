@@ -30,7 +30,7 @@ void Particle::OnUpdate(double dt)
 	this->y += this->vy;
 }
 
-void Particle::OnDraw(sf::RenderWindow & window)
+void Particle::OnDraw(sf::RenderTarget & window)
 {
 	int radius = 8;
 	sf::RectangleShape shape(sf::Vector2f(radius, radius));

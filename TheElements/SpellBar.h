@@ -14,7 +14,7 @@ public:
 
 	void OnUpdate();
 
-	void OnDraw(sf::RenderWindow& window);
+	void OnDraw(sf::RenderTarget& window);
 
 	void SetElementPosition(sf::Vector2f position, Elements element);
 

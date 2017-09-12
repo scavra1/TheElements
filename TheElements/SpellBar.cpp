@@ -67,7 +67,7 @@ void SpellBar::OnUpdate()
 {
 }
 
-void SpellBar::OnDraw(sf::RenderWindow& window)
+void SpellBar::OnDraw(sf::RenderTarget& window)
 {
 	
 	

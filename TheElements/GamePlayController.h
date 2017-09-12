@@ -22,6 +22,8 @@ public:
 
 private:
 
+	bool isGamePaused;
+
 	sf::RenderWindow* window;
 
 	Wizard* playerOne;
@@ -51,5 +53,10 @@ private:
 	void handlePlayersCollisions(double straightDistance1, double sidewaysDistance1, double rotation1, double straightDistance2, double sidewaysDistance2, double rotation2);
 
 	void handleParticles();
+	sf::Shader pauseShader;
+
+	sf::Sprite gameSceneSprite;
+
+	sf::RenderTexture gameSceneTexture;
 
 };

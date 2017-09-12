@@ -74,7 +74,7 @@ void Wizard::RotateRight(double angle)
 {
 	this->rotation += angle;
 }
-void Wizard::OnDraw(sf::RenderWindow & window)
+void Wizard::OnDraw(sf::RenderTarget & window)
 {
 	const int flatsPerImage = 8;
 	const int flats = 2;

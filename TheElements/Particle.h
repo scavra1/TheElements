@@ -7,7 +7,9 @@ class Particle
 public:
 	Particle(double x, double y, double vx, double vy, Elements type);
 	void OnUpdate(double dt);
-	void OnDraw(sf::RenderWindow & window);
+
+	void OnDraw(sf::RenderTarget & window);
+
 	void applyForce(double fx, double fy);
 	bool isAlive();
 	void kill();
