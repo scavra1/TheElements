@@ -51,6 +51,7 @@ void Particle::OnDraw(sf::RenderTarget & window)
 		break;
 	}
 	shape.setPosition(this->x- radius/2, this->y- radius / 2);
+	shape.setRotation(45);
 	window.draw(shape);
 }
 

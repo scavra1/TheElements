@@ -86,9 +86,9 @@ void GamePlayController::UpdateGamePlay()
 				for (int i = 0; i < 1; i++)
 				{
 
-					if (this->playerTwo->UseMana(manaNeeded * 2)) {
-						this->playerTwoParticles.push_back(this->playerTwo->generateParticle(Elements::Water));
-						this->playerTwoMana->SubtractResource(manaNeeded * 2);
+					if (this->playerTwo->UseMana(manaNeeded * 1)) {
+						this->playerTwoParticles.push_back(this->playerTwo->generateParticle(Elements::Fire));
+						this->playerTwoMana->SubtractResource(manaNeeded * 1);
 					}
 				}
 			}
@@ -115,33 +115,6 @@ void GamePlayController::PollGamePlayEvents()
 		}
 	}
 }
-/*
-void GamePlayController::DrawGamePlay()
-{
-	for (auto particle : this->playerOneParticles) {
-		particle.OnDraw(*this->window);
-	}
-	for (auto particle : this->playerTwoParticles) {
-		particle.OnDraw(*this->window);
-	}
-
-	this->playerOne->OnDraw(*this->window);
-	this->playerTwo->OnDraw(*this->window);
-	
-	for (Block block : this->blocks) {
-		block.OnDraw(*this->window);
-	}
-
-	this->playerOneHealth->OnDraw(*this->window);
-	this->playerOneMana->OnDraw(*this->window);
-
-	this->playerTwoHealth->OnDraw(*this->window);
-	this->playerTwoMana->OnDraw(*this->window);
-
-	this->playerOneSpellBar->OnDraw(*this->window);
-	this->playerTwoSpellBar->OnDraw(*this->window);
-}
-*/
 
 void GamePlayController::handleSteering()
 {
@@ -193,26 +166,23 @@ void GamePlayController::handlePlayersCollisions(double straightDistance1, doubl
 			if (playerOne->checkCollision(block)) {
 				playerOne->RotateRight(-bounceRotation * 2);
 				if (playerOne->checkCollision(block)) {
-					playerOne->RotateRight(-bounceRotation * 2);
-					if (playerOne->checkCollision(block)) {
-						playerOne->RotateRight(bounceRotation);
-						playerOne->MoveForward(-straightDistance1);
-						playerOne->MoveRight(-sidewaysDistance1);
-						playerOne->RotateRight(-rotation1);
-					}
+					playerOne->RotateRight(bounceRotation);
+					playerOne->MoveForward(-straightDistance1);
+					playerOne->MoveRight(-sidewaysDistance1);
+					playerOne->RotateRight(-rotation1);
 				}
 			}
-			if (playerTwo->checkCollision(block))
-			{
-				playerTwo->RotateRight(bounceRotation);
+		}
+		if (playerTwo->checkCollision(block))
+		{
+			playerTwo->RotateRight(bounceRotation);
+			if (playerTwo->checkCollision(block)) {
+				playerTwo->RotateRight(-bounceRotation * 2);
 				if (playerTwo->checkCollision(block)) {
-					playerTwo->RotateRight(-bounceRotation * 2);
-					if (playerTwo->checkCollision(block)) {
-						playerTwo->RotateRight(bounceRotation);
-						playerTwo->MoveForward(-straightDistance2);
-						playerTwo->MoveRight(-sidewaysDistance2);
-						playerTwo->RotateRight(-rotation2);
-					}
+					playerTwo->RotateRight(bounceRotation);
+					playerTwo->MoveForward(-straightDistance2);
+					playerTwo->MoveRight(-sidewaysDistance2);
+					playerTwo->RotateRight(-rotation2);
 				}
 			}
 		}
@@ -338,7 +308,7 @@ void GamePlayController::handleParticles()
 		double y1 = this->playerOneParticles[i].getY();
 		bool killedParticlesFlag = false;
 		for (int j = 0; j < this->playerTwoParticles.size(); j++) {
-			if (!(this->playerOneParticles[i].getType() == this->playerTwoParticles[j].getType() == Elements::Water)) {
+			if (!(this->playerOneParticles[i].getType() == this->playerTwoParticles[j].getType() && this->playerTwoParticles[j].getType() == Elements::Water)) {
 				double x2 = this->playerTwoParticles[j].getX();
 				double y2 = this->playerTwoParticles[j].getY();
 				double distance = hypot(x1 - x2, y1 - y2);
