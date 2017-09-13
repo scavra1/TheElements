@@ -11,19 +11,19 @@ MainMenu::MainMenu(sf::Vector2u windowSize)
 	sf::Text credits("Credits", this->menuFont, 70);
 	sf::Text exit("Exit", this->menuFont, 70);
 
-	newGame.setFillColor(sf::Color::Red);
+	newGame.setFillColor(sf::Color(255, 128, 0));
 	newGame.setPosition((windowSize.x - newGame.getLocalBounds().width) / 2, 50);
 
-	settings.setFillColor(sf::Color::Red);
+	settings.setFillColor(sf::Color(255, 128, 0));
 	settings.setPosition((windowSize.x - settings.getLocalBounds().width) / 2, 150);
 
-	authors.setFillColor(sf::Color::Red);
+	authors.setFillColor(sf::Color(255, 128, 0));
 	authors.setPosition((windowSize.x - authors.getLocalBounds().width) / 2, 250);
 
-	credits.setFillColor(sf::Color::Red);
+	credits.setFillColor(sf::Color(255, 128, 0));
 	credits.setPosition((windowSize.x - credits.getLocalBounds().width) / 2, 350);
 
-	exit.setFillColor(sf::Color::Red);
+	exit.setFillColor(sf::Color(255, 128, 0));
 	exit.setPosition((windowSize.x - exit.getLocalBounds().width) / 2, 450);
 
 	options.push_back(newGame);

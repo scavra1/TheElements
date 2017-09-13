@@ -72,7 +72,7 @@ int main(int argc, char ** argv)
 		//mainMenu.OnUpdate(mousePosition, std::cos(clock.getElapsedTime().asSeconds()));
 
 
-		window.clear(sf::Color::White);
+		window.clear(sf::Color(50, 50, 50));
 
 
 		switch (mainMenuStates)

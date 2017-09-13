@@ -20,7 +20,7 @@ void Block::OnDraw(sf::RenderTarget & window)
 {
 	sf::RectangleShape rectangle(sf::Vector2f(this->width, this->height));
 	rectangle.setPosition(this->x - this->width / 2, this->y - this->height / 2);
-	rectangle.setFillColor(sf::Color(100, 250, 50));
+	rectangle.setFillColor(sf::Color(255, 128, 0));
 	window.draw(rectangle);
 }
 
