@@ -35,19 +35,24 @@ void Particle::OnDraw(sf::RenderTarget & window)
 	int radius = 8;
 	sf::RectangleShape shape(sf::Vector2f(radius, radius));
 	double a = a = 255 / (this->lifeTime * this->lifeTime);
-	double color = -this->age*this->age * a + 255.0;
+	double waterColor = -this->age*this->age * a + 255.0;
+	double fireColor = 6 * 255 * this->age / this->lifeTime;
+	double b = 255 - (fireColor > 255 ? 255 : fireColor);
+	double g = 255 - (fireColor - 255 > 255 ? 255 : (fireColor - 255 < 0 ? 0 : fireColor - 255));
 	switch (this->type) {
 	case Elements::Fire:
-		shape.setFillColor(sf::Color(255, 255 - color, 255 - color));
+		
+		shape.setFillColor(sf::Color(255, g, b));
+		//shape.setFillColor(sf::Color(255, 255 - color, 255 - color));
 		break;
 	case Elements::Water:
-		shape.setFillColor(sf::Color(255 - color, 255 - color, 255));
+		shape.setFillColor(sf::Color(255 - waterColor, 255 - waterColor, 255));
 		break;
 	case Elements::Earth:
-		shape.setFillColor(sf::Color(255 - color, 255, 255 - color));
+		shape.setFillColor(sf::Color(255 - waterColor, 255, 255 - waterColor));
 		break;
 	case Elements::Shadow:
-		shape.setFillColor(sf::Color(255 - color, 255 - color, 255 - color));
+		shape.setFillColor(sf::Color(255 - waterColor, 255 - waterColor, 255 - waterColor));
 		break;
 	}
 	shape.setPosition(this->x- radius/2, this->y- radius / 2);
