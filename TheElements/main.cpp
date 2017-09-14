@@ -8,6 +8,9 @@
 #include "GamePlayController.h"
 #include <iostream>
 
+/**
+* Main entry point.
+*/
 int main(int argc, char ** argv)
 {
 	srand(time(NULL));

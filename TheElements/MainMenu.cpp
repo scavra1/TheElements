@@ -1,5 +1,9 @@
 #include "MainMenu.h"
 
+/**
+* Constructor. Initializes option text entities and floating effect shader.
+* @param windowSize size of render target
+*/
 MainMenu::MainMenu(sf::Vector2u windowSize)
 {
 	if (!this->menuFont.loadFromFile("fonts/sansation.ttf"))
@@ -37,7 +41,11 @@ MainMenu::MainMenu(sf::Vector2u windowSize)
 
 	this->currentOption = -1;
 }
-
+/**
+* Updates menu scene. Checks if mouse hovers on any option.
+* @param mousePosition mouse coordinates
+* @param wavePhase parameter sent to shader to 'float' the hovering option
+*/
 void MainMenu::OnUpdate(sf::Vector2i mousePosition, float wavePhase)
 {
 	currentOption = -1;
@@ -54,6 +62,10 @@ void MainMenu::OnUpdate(sf::Vector2i mousePosition, float wavePhase)
 	this->menuShader.setUniform("blur_radius", 0.0f);
 }
 
+/**
+* Draws menu onto render target.
+* @param window render target
+*/
 void MainMenu::OnDraw(sf::RenderWindow & window)
 {
 	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
@@ -69,7 +81,9 @@ void MainMenu::OnDraw(sf::RenderWindow & window)
 		}
 	}
 }
-
+/**
+* Gets index of option currently hovered by mouse.
+*/
 int MainMenu::GetCurrentOption()
 {
 	return this->currentOption;

@@ -1,5 +1,8 @@
 #include "SpellBar.h"
 
+/**
+* Constructor. Initializes players' spellbar objects and neccessary shaders.
+*/
 SpellBar::SpellBar()
 {
 	if (!this->fireSpellTexture.loadFromFile("textures/fireSpell2.png"))
@@ -41,17 +44,10 @@ SpellBar::SpellBar()
 	this->cooldownShader.setUniform("sheathSize", (int)this->cooldownSheathTexture.getSize().x);
 }
 
-bool SpellBar::IsSpellReady(Elements element)
-{
-	switch (element)
-	{
-	case Elements::Fire: return this->fireSpellCooldown.getElapsedTime().asSeconds() > 3.0f;
-	case Elements::Water: return this->waterSpellCooldown.getElapsedTime().asSeconds() > 3.0f;
-	case Elements::Earth: return this->earthSpellCooldown.getElapsedTime().asSeconds() > 3.0f;
-	case Elements::Shadow: return this->shadowSpellCooldown.getElapsedTime().asSeconds() > 3.0f;
-	}
-}
-
+/**
+* Resets cooldown timer for given element type.
+* @param element element type
+*/
 void SpellBar::UseSpell(Elements element)
 {
 	switch (element)
@@ -63,14 +59,12 @@ void SpellBar::UseSpell(Elements element)
 	}
 }
 
-void SpellBar::OnUpdate()
-{
-}
-
+/**
+* Draws the spellbar onto render target.
+* @param window render target.
+*/
 void SpellBar::OnDraw(sf::RenderTarget& window)
 {
-	
-	
 	this->cooldownShader.setUniform("cooldown", this->fireSpellCooldown.getElapsedTime().asSeconds() / 5.0f);
 	this->cooldownShader.setUniform("beginPosition", this->fireSpellSprite.getPosition().x);
 	this->cooldownSheathSprite.setPosition(this->fireSpellSprite.getPosition());
@@ -100,11 +94,15 @@ void SpellBar::OnDraw(sf::RenderTarget& window)
 	window.draw(this->cooldownSheathSprite, sf::RenderStates(&this->cooldownShader));
 }
 
+/**
+* Sets given element spell position for rendering.
+* @param position new position
+* @param element element type
+*/
 void SpellBar::SetElementPosition(sf::Vector2f position, Elements element)
 {
 	switch (element)
 	{
-	
 	case Elements::Fire: this->fireSpellSprite.setPosition(position); break;
 	case Elements::Water: this->waterSpellSprite.setPosition(position); break;
 	case Elements::Earth: this->earthSpellSprite.setPosition(position); break;

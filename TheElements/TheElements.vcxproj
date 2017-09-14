@@ -135,7 +135,6 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="ManaBar.cpp" />
     <ClCompile Include="Particle.cpp" />
-    <ClCompile Include="PlayerConfig.cpp" />
     <ClCompile Include="ResourceBar.cpp" />
     <ClCompile Include="MainMenuController.cpp" />
     <ClCompile Include="SpellBar.cpp" />
