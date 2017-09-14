@@ -21,10 +21,6 @@ public:
 
 	void MoveForward(double displacement);
 
-	void StartAttack();
-
-	void StopAttack();
-
 	void RotateLeft(double angle);
 
 	void RotateRight(double angle);

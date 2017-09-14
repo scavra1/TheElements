@@ -3,6 +3,9 @@
 #include <utility>
 # define M_PI           3.14159265358979323846  /* pi */
 
+/**
+* Constructor. Sets wizard's max health and max mana
+*/
 Wizard::Wizard(int maxHealth, int maxMana)
 {
 	this->health = maxHealth;
@@ -20,6 +23,9 @@ Wizard::Wizard(int maxHealth, int maxMana)
 	this->rotation = M_PI / 2.0;
 }
 
+/**
+* Sets wizard's position and rotation
+*/
 void Wizard::SetPosition(double x, double y, double r)
 {
 	this->xPosition = x;
@@ -27,18 +33,27 @@ void Wizard::SetPosition(double x, double y, double r)
 	this->rotation = r;
 }
 
+/**
+* Moves wizard left (relative to its rotation) by a given distance
+*/
 void Wizard::MoveLeft(double displacement)
 {
 	this->yPosition -= displacement * cos(this->rotation - M_PI / 2);
 	this->xPosition += displacement * sin(this->rotation - M_PI / 2);
 }
 
+/**
+* Moves wizard right (relative to its rotation) by a given distance
+*/
 void Wizard::MoveRight(double displacement)
 {
 	this->yPosition -= displacement * cos(this->rotation + M_PI / 2);
 	this->xPosition += displacement * sin(this->rotation + M_PI / 2);
 }
 
+/**
+* Moves wizard backward (relative to its rotation) by a given distance
+*/
 void Wizard::MoveBackward(double displacement)
 {
 	this->yPosition -= displacement * cos(this->rotation + M_PI);
@@ -47,6 +62,9 @@ void Wizard::MoveBackward(double displacement)
 		this->isMoving = true;
 }
 
+/**
+* Moves wizard forward (relative to its rotation) by a given distance
+*/
 void Wizard::MoveForward(double displacement)
 {
 	this->yPosition -= displacement * cos(this->rotation);
@@ -55,25 +73,25 @@ void Wizard::MoveForward(double displacement)
 		this->isMoving = true;
 }
 
-void Wizard::StartAttack()
-{
-
-}
-
-void Wizard::StopAttack()
-{
-
-}
-
+/**
+* Rotates wizard anti-clockwise
+*/
 void Wizard::RotateLeft(double angle)
 {
 	this->rotation -= angle;
 }
 
+/**
+* Rotates wizard clockwise
+*/
 void Wizard::RotateRight(double angle)
 {
 	this->rotation += angle;
 }
+
+/**
+* Method that is responsible for drawing wizard on the screen
+*/
 void Wizard::OnDraw(sf::RenderTarget & window)
 {
 	const int flatsPerImage = 8;
@@ -88,11 +106,17 @@ void Wizard::OnDraw(sf::RenderTarget & window)
 	window.draw(this->wizardSprite);
 }
 
+/**
+* Decreases wizard's health by a given amount
+*/
 void Wizard::TakeDamage(int damage)
 {
 	health -= damage;
 }
 
+/**
+* Decreases wizard's mana by a given amount
+*/
 bool Wizard::UseMana(double mana)
 {
 	if (this->mana < mana)
@@ -101,10 +125,17 @@ bool Wizard::UseMana(double mana)
 	return true;
 }
 
+
+/**
+* Increases wizard;s mana by a given amount
+*/
 void Wizard::IncreaseMana(double mana) {
 	this->mana = std::min(this->mana + mana, this->maxMana);
 }
 
+/**
+* Check if wizard collides with given block
+*/
 bool Wizard::checkCollision(Block block)
 {
 	std::vector<std::pair<double, double>> corners = this->calculateCorners();
@@ -119,6 +150,10 @@ bool Wizard::checkCollision(Block block)
 	return false;
 }
 
+
+/**
+* Check if wizard collides with a given point
+*/
 bool Wizard::checkCollision(double pointX, double pointY)
 {
 	std::vector<std::pair<double, double>> corners = this->calculateCorners();
@@ -128,6 +163,9 @@ bool Wizard::checkCollision(double pointX, double pointY)
 		pointY < std::max(corners[0].second, corners[2].second);
 }
 
+/**
+* Creates and returns vertices of wizard's collider
+*/
 std::vector<std::pair<double, double>> Wizard::calculateCorners()
 {
 	double width = 43;
@@ -151,16 +189,25 @@ std::vector<std::pair<double, double>> Wizard::calculateCorners()
 	return corners;
 }
 
+/**
+* Returns wizard's health
+*/
 double Wizard::getHealth()
 {
 	return this->health;
 }
 
+/**
+* Returns wizard's mana
+*/
 double Wizard::getMana()
 {
 	return this->mana;
 }
 
+/**
+* Returns new particle with appriopriate position and velocity 
+*/
 Particle Wizard::generateParticle(Elements type)
 {
 	double leftDistance, frontDistance, dx, dy, particleSpeed, divergence, angle;
@@ -187,6 +234,9 @@ Particle Wizard::generateParticle(Elements type)
 	
 }
 
+/**
+* Method that should be called before each frame
+*/
 void Wizard::OnUpdate()
 {
 	this->wizardSprite.setRotation(this->rotation * 180 / M_PI);

@@ -1,6 +1,8 @@
 #include "Particle.h"
 
-
+/**
+* Constructor. Sets particle's position, velocity and type
+*/
 Particle::Particle(double x, double y, double vx, double vy, Elements type)
 {
 	this->x = this->lastX = x;
@@ -21,6 +23,9 @@ Particle::Particle(double x, double y, double vx, double vy, Elements type)
 	}
 }
 
+/**
+* Method that should be called before every frame
+*/
 void Particle::OnUpdate(double dt)
 {
 	this->age += dt;
@@ -30,6 +35,9 @@ void Particle::OnUpdate(double dt)
 	this->y += this->vy;
 }
 
+/**
+* Method that is responsible for drawing particle on the screen
+*/
 void Particle::OnDraw(sf::RenderTarget & window)
 {
 	int radius = 8;
@@ -60,17 +68,28 @@ void Particle::OnDraw(sf::RenderTarget & window)
 	window.draw(shape);
 }
 
+/**
+* Applies force on particle
+* @param fx force in x axis.
+* @param fy force in y axis.
+*/
 void Particle::applyForce(double fx, double fy)
 {
 	this->vx += fx;
 	this->vy += fy;
 }
 
+/**
+* Returns true if particle's age is lesser than its lifetime. False otherwise.
+*/
 bool Particle::isAlive()
 {
 	return this->age < this->lifeTime;
 }
 
+/**
+* Sets particle's age to value greater than its lifetime
+*/
 void Particle::kill()
 {
 	this->age = this->lifeTime + 1.0;

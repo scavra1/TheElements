@@ -2,7 +2,9 @@
 #include <math.h>
 
 
-
+/**
+* Constructor. Sets block's position and dimensions
+*/
 Block::Block(double x, double y, double width, double height)
 {
 	this->x = x;
@@ -16,6 +18,9 @@ Block::~Block()
 {
 }
 
+/**
+* Method that is responsible for drawing block on the screen
+*/
 void Block::OnDraw(sf::RenderTarget & window)
 {
 	sf::RectangleShape rectangle(sf::Vector2f(this->width, this->height));
@@ -24,6 +29,9 @@ void Block::OnDraw(sf::RenderTarget & window)
 	window.draw(rectangle);
 }
 
+/**
+* Checks if block contains given point
+*/
 bool Block::containsPoint(double pointX, double pointY)
 {
 	return	pointX > this->x - this->width / 2 &&
@@ -32,6 +40,9 @@ bool Block::containsPoint(double pointX, double pointY)
 			pointY < this->y + this->height / 2;
 }
 
+/**
+* Checks if segment (given by two points) is intersecting block's vertical wall
+*/
 bool Block::isIntersectingVerticalWall(double p1x, double p1y, double p2x, double p2y)
 {
 	double a = (p2y - p1y) / (p2x - p1x);
