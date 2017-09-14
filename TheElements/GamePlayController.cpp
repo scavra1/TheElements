@@ -1,6 +1,9 @@
 #include "GamePlayController.h"
 #include <iostream>
 
+/**
+* Constructor. Creates UI and game elements.
+*/
 GamePlayController::GamePlayController(sf::RenderWindow * window)
 {
 	this->playerOne = new Wizard(200, 400);
@@ -46,6 +49,9 @@ GamePlayController::GamePlayController(sf::RenderWindow * window)
 		throw std::string("Could not load shader in objects loader");
 }
 
+/**
+* Method that updates game objects'. Should be called for every frame of the game.
+*/
 void GamePlayController::UpdateGamePlay()
 {
 	if (!this->isGamePaused)
@@ -98,6 +104,9 @@ void GamePlayController::UpdateGamePlay()
 	}
 }
 
+/**
+* Handles keyboard and window events
+*/
 void GamePlayController::PollGamePlayEvents()
 {
 	sf::Event event;
@@ -116,6 +125,9 @@ void GamePlayController::PollGamePlayEvents()
 	}
 }
 
+/**
+* Method responsible for moving players.
+*/
 void GamePlayController::handleSteering()
 {
 	const double straightSpeed = 4.0;
@@ -156,6 +168,9 @@ void GamePlayController::handleSteering()
 	this->handlePlayersCollisions(straightDistance1, sidewaysDistance1, rotation1, straightDistance2, sidewaysDistance2, rotation2);
 }
 
+/**
+* Checks for player-block collisions
+*/
 void GamePlayController::handlePlayersCollisions(double straightDistance1, double sidewaysDistance1, double rotation1, double straightDistance2, double sidewaysDistance2, double rotation2)
 {
 	const double bounceRotation = 0.1;
@@ -189,6 +204,9 @@ void GamePlayController::handlePlayersCollisions(double straightDistance1, doubl
 	}
 }
 
+/**
+* Takes care of particles behaviour
+*/
 void GamePlayController::handleParticles()
 {
 	//Removing dead particles
@@ -340,6 +358,9 @@ void GamePlayController::handleParticles()
 	}
 }
 
+/**
+* Draws game on the screen
+*/
 void GamePlayController::DrawGamePlay()
 {
 	if (!this->isGamePaused)
